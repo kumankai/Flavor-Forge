@@ -1,5 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Flavor_Forge.Entities.Recipe
 @{
+    ViewData["Title"] = "Employee Details";
 }
+
+<div class="text-center">
+    <h1 class="display-4">Details of an Employee</h1>
+</div>
+
+<div>
+    <div>
+        <label type="text" asp-for="Id" class="control-label"></label>
+        <input asp-for="Id" class="form-control" readonly />
+    </div>
+    <div>
+        <label type="text" asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" readonly />
+    </div>
+    <div>
+        <label type="text" asp-for="Instructions" class="control-label"></label>
+        <input asp-for="Instructions" class="form-control" readonly />
+    </div>
+    <div>
+        <a class="btn btn-success" asp-page="Index">Show All Recipes</a>
+    </div>
+</div>

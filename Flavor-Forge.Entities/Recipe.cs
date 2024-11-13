@@ -12,6 +12,7 @@ namespace Flavor_Forge.Entities
         [Key]
         public int Id { get; set; }
         public string? Name { get; set; }
+        public string? Instructions { get; set; }
         public List<string>? Ingredients { get; set; }
     }
 }

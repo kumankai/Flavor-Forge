@@ -4,12 +4,7 @@ namespace Flavor_Forge.Operations.Controllers
 {
     public class UserController : Controller
     {
-        public IActionResult Login()
-        {
-            return View();
-        }
-        
-        public IActionResult Register()
+        public IActionResult Profile()
         {
             return View();
         }
