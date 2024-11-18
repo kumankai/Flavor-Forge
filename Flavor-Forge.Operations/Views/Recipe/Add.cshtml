@@ -1,0 +1,97 @@
+﻿@model Flavor_Forge.Entities.Recipe
+
+@using (Html.BeginForm("CreateRecipe", "Recipe", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <!-- Recipe Name Field -->
+    <div class="form-group mb-3">
+        @Html.Label("RecipeName", "Recipe Name", new { @class = "form-label" })
+        @Html.TextBox("RecipeName", null, new { @class = "form-control", placeholder = "Enter recipe name" })
+    </div>
+
+    <!-- Ingredients Section -->
+    <div id="ingredients-container" class="mb-3">
+        <h4>Ingredients</h4>
+        <div class="ingredients-list">
+            <div class="form-group">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <input type="text" name="Ingredients[0].Name" placeholder="Enter ingredient" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="Ingredients[0].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
+                    </div>
+                    <div class="col-md-3">
+                        <select name="Ingredients[0].Unit" class="form-control">
+                            <option value="">Select Unit</option>
+                            <option value="cup">Cup(s)</option>
+                            <option value="tbsp">Tablespoon(s)</option>
+                            <option value="tsp">Teaspoon(s)</option>
+                            <option value="oz">Ounce(s)</option>
+                            <option value="lb">Pound(s)</option>
+                            <option value="g">Gram(s)</option>
+                            <option value="ml">Milliliter(s)</option>
+                            <option value="piece">Piece(s)</option>
+                            <option value="pinch">Pinch</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-10">
+                <button type="button" class="btn btn-secondary w-100" onclick="addIngredient()">Add Another Ingredient</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Instructions Field -->
+    <div class="form-group mb-3">
+        @Html.Label("Instructions", "Instructions", new { @class = "form-label" })
+        @Html.TextArea("Instructions", null, new { @class = "form-control", placeholder = "Enter recipe instructions", rows = 4 })
+    </div>
+
+    <!-- Submit and Cancel Buttons -->
+    <div class="form-group mt-4">
+        <input type="submit" value="Add Recipe" class="btn btn-primary" />
+        <a asp-action="ShowRecipes" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+}
+
+<!-- JavaScript for adding ingredients dynamically -->
+<script>
+    let ingredientIndex = 1;
+
+    function addIngredient() {
+        const container = document.querySelector('.ingredients-list');
+
+        const newIngredient = document.createElement('div');
+        newIngredient.classList.add('form-group', 'mt-2');
+
+        newIngredient.innerHTML = `
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
+                    </div>
+                    <div class="col-md-3">
+                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
+                            <option value="">Select Unit</option>
+                            <option value="cup">Cup(s)</option>
+                            <option value="tbsp">Tablespoon(s)</option>
+                            <option value="tsp">Teaspoon(s)</option>
+                            <option value="oz">Ounce(s)</option>
+                            <option value="lb">Pound(s)</option>
+                            <option value="g">Gram(s)</option>
+                            <option value="ml">Milliliter(s)</option>
+                            <option value="piece">Piece(s)</option>
+                            <option value="pinch">Pinch</option>
+                        </select>
+                    </div>
+                </div>`;
+
+        container.appendChild(newIngredient);
+        ingredientIndex++;
+    }
+</script>
