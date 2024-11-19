@@ -8,6 +8,10 @@ namespace Flavor_Forge.Operations.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
         public IActionResult Logout()
         {
             return View();

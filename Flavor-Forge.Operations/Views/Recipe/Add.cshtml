@@ -4,17 +4,8 @@
 {
     <!-- Recipe Name Field -->
     <div class="form-group mb-3">
-        <!-- Label for the Recipe Name input field -->
         @Html.Label("RecipeName", "Recipe Name", new { @class = "form-label" })
         @Html.TextBox("RecipeName", null, new { @class = "form-control", placeholder = "Enter recipe name" })
-    </div>
-
-    <!-- Cuisine Type Dropdown Field -->
-    <div class="form-group mb-3">
-        <!-- Label for Cuisine Type dropdown -->
-        @Html.Label("CuisineType", "Cuisine Type", new { @class = "form-label" })
-        <!-- Dropdown list for selecting cuisine type, populated from ViewBag.CuisineTypes -->
-        @Html.DropDownList("CuisineType", new SelectList(ViewBag.CuisineTypes, "Value", "Text"), "Select Cuisine", new { @class = "form-select" })
     </div>
 
     <!-- Ingredients Section -->
@@ -26,6 +17,8 @@
                     <div class="col-md-5">
                         <input type="text" name="Ingredients[0].Name" placeholder="Enter ingredient" class="form-control" />
                     </div>
+                    <div class="col-md-2">
+                        <input type="number" name="Ingredients[0].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
                     </div>
                     <div class="col-md-3">
                         <select name="Ingredients[0].Unit" class="form-control">
@@ -53,63 +46,52 @@
 
     <!-- Recipe Instructions Field -->
     <div class="form-group mb-3">
-        <!-- Label for Recipe Description -->
         @Html.Label("Instructions", "Instructions", new { @class = "form-label" })
-        <!-- Text area for recipe description -->
         @Html.TextArea("Instructions", null, new { @class = "form-control", placeholder = "Enter recipe instructions", rows = 4 })
     </div>
 
     <!-- Submit and Cancel Buttons -->
     <div class="form-group mt-4">
-        <!-- Submit button to save recipe -->
         <input type="submit" value="Add Recipe" class="btn btn-primary" />
-        <!-- Cancel button to go back to the recipe listing page -->
         <a asp-action="ShowRecipes" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 }
 
 <!-- JavaScript for adding ingredients dynamically -->
 <script>
-    // Index to keep track of each ingredient's position in the ingredients array
     let ingredientIndex = 1;
 
-    // Function to add new ingredient input fields dynamically
     function addIngredient() {
         const container = document.querySelector('.ingredients-list');
 
-        // Create a new div element for the new ingredient input fields
         const newIngredient = document.createElement('div');
+        newIngredient.classList.add('form-group', 'mt-2');
 
-        // Set the HTML for the new ingredient input fields, with updated name attributes for model binding
         newIngredient.innerHTML = `
-                <div class="row align-items-center">
-                    <div class="col-md-5">
-                        <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
-                    </div>
-                    <div class="col-md-3">
-                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
-                            <option value="">Select Unit</option>
-                            <option value="cup">Cup(s)</option>
-                            <option value="tbsp">Tablespoon(s)</option>
-                            <option value="tsp">Teaspoon(s)</option>
-                            <option value="oz">Ounce(s)</option>
-                            <option value="lb">Pound(s)</option>
-                            <option value="g">Gram(s)</option>
-                            <option value="ml">Milliliter(s)</option>
-                            <option value="piece">Piece(s)</option>
-                            <option value="pinch">Pinch</option>
-                        </select>
-                    </div>
-                </div>`;
+                    <div class="row align-items-center">
+                        <div class="col-md-5">
+                            <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
+                        </div>
+                        <div class="col-md-3">
+                            <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
+                                <option value="">Select Unit</option>
+                                <option value="cup">Cup(s)</option>
+                                <option value="tbsp">Tablespoon(s)</option>
+                                <option value="tsp">Teaspoon(s)</option>
+                                <option value="oz">Ounce(s)</option>
+                                <option value="lb">Pound(s)</option>
+                                <option value="g">Gram(s)</option>
+                                <option value="ml">Milliliter(s)</option>
+                                <option value="piece">Piece(s)</option>
+                                <option value="pinch">Pinch</option>
+                            </select>
+                        </div>
+                    </div>`;
 
-        // Append the new ingredient div to the container
         container.appendChild(newIngredient);
-
-        // Increment the index for the next ingredient
         ingredientIndex++;
     }
 </script>
-
