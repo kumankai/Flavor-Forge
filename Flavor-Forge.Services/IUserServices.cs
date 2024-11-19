@@ -9,5 +9,10 @@ namespace Flavor_Forge.Services
 {
     public interface IUserServices
     {
+        List<User> GetUsers();
+        User GetUser(int userId);
+        User CreateUser(User user);
+        User UpdateUser(User user);
+        string DeleteUser(int userId);
     }
 }

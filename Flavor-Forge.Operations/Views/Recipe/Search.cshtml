@@ -60,7 +60,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 recipe-card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">@recipe.Name</h5>
+                                <h5 class="card-title">@recipe.RecipeName</h5>
                                 <!-- Ingredients List -->
                                 <div class="ingredients-list mb-3">
                                     <h6 class="mb-2">Ingredients:</h6>
@@ -79,7 +79,7 @@
                             </div>
                             <!-- Card Footer with View Button -->
                             <div class="card-footer bg-white border-top-0">
-                                <a href="@Url.Action("Details", "Recipe", new { id = recipe.Id })"
+                                <a href="@Url.Action("Details", "Recipe", new { id = recipe.RecipeId })"
                                    class="btn btn-outline-primary w-100">View Full Recipe</a>
                             </div>
                         </div>
