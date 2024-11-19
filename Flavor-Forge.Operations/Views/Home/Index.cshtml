@@ -1,8 +1,146 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Recipe Finder";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero-section text-center py-5">
+        <h1 class="display-4 mb-4">Find Delicious Recipes</h1>
+        <p class="lead mb-5">Enter ingredients you have, and we'll show you what you can cook!</p>
+
+        <!-- Search Box -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <form asp-controller="Recipe" asp-action="Search" method="get" class="search-form">
+                    <div class="input-group input-group-lg shadow-sm">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Enter ingredients (e.g., chicken, rice, tomatoes)"
+                               name="ingredients"
+                               id="ingredientSearch">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Find Recipes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Popular Categories -->
+        <div class="categories-section mb-5">
+            <h2 class="h4 mb-4">Popular Categories</h2>
+            <div class="row justify-content-center g-4">
+                <div class="col-6 col-md-3">
+                    <a href="#" class="category-card">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-clock mb-3 text-primary"></i>
+                                <h5 class="card-title">Quick & Easy</h5>
+                                <p class="card-text small">Ready in 30 minutes</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#" class="category-card">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-leaf mb-3 text-success"></i>
+                                <h5 class="card-title">Vegetarian</h5>
+                                <p class="card-text small">Plant-based dishes</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#" class="category-card">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-fire mb-3 text-danger"></i>
+                                <h5 class="card-title">Trending</h5>
+                                <p class="card-text small">Most popular now</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#" class="category-card">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-heart mb-3 text-danger"></i>
+                                <h5 class="card-title">Healthy</h5>
+                                <p class="card-text small">Nutritious meals</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .hero-section {
+        background-color: #f8f9fa;
+        border-radius: 15px;
+        margin: 2rem 0;
+        padding: 3rem 1rem;
+    }
+
+    .search-form .input-group {
+        background: white;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+
+    .search-form .form-control {
+        border: none;
+        padding: 15px 25px;
+    }
+
+    .search-form .form-control:focus {
+        box-shadow: none;
+    }
+
+    .search-form .btn {
+        padding: 15px 30px;
+        border: none;
+        background: #0d6efd;
+        color: white;
+    }
+
+    .category-card {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: transform 0.2s;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px);
+        color: inherit;
+    }
+
+    .category-card .card {
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .category-card i {
+        font-size: 2rem;
+    }
+
+    .card-text {
+        color: #6c757d;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Add autocomplete or other interactive features here if needed
+        $(document).ready(function() {
+            // Example: Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
