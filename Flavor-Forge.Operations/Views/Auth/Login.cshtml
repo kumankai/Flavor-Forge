@@ -1,5 +1,91 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Flavor_Forge.Entities.User
 @{
+    ViewBag.Title = "Login";
 }
+<!-- Link to account.css -->
+<!--<link href="~/css/account.css" rel="stylesheet" type="text/css" />-->
+<div class="pt-5">
+    <h1 class="text-center">Login Page</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="card card-body">
+                @using (Html.BeginForm("Login", "AuthController", FormMethod.Post, new { id = "submitForm", @class = "form", data_parsley_validate = "true", novalidate = "true" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
+
+                        <div class="form-group required">
+                            @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group required">
+                            <label class="d-flex flex-row align-items-center" for="password">
+                                @Html.LabelFor(m => m.Password, "Password", new { @class = "mr-auto" })
+                                <a class="ml-auto border-link small-xl" href="@Url.Action("ForgetPassword", "Account")">Forget?</a>
+                            </label>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-4 mb-4">
+                            <div class="custom-control custom-checkbox">
+                                @Html.CheckBox("RememberMe", new { @class = "custom-control-input", @id = "remember-me", data_parsley_multiple = "remember-me" })
+                                <label class="custom-control-label" for="remember-me">Remember me?</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group pt-1">
+                            <button class="btn btn-primary btn-block" type="submit">Log In</button>
+                        </div>
+                    }
+                <p class="small-xl pt-3 text-center">
+                    <span class="text-muted">Not a member?</span>
+                    <a href="@Url.Action("Register","Auth")">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<style>
+    body {
+        background: #f8f9fa !important;
+    }
+
+    h1 {
+        color: black;
+        padding-bottom: 2rem;
+        font-weight: bold;
+    }
+
+    a {
+        color: #333;
+    }
+
+        a:hover {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+    .form-control:focus {
+        color: #000;
+        background-color: #fff;
+        border: 2px solid #0d6efd;
+        outline: 0;
+        box-shadow: none;
+    }
+
+    .btn {
+        background: #0d6efd;
+        border: #0d6efd;
+    }
+
+        .btn:hover {
+            background: #0d6efd;
+            border: #0d6efd;
+        }
+</style>
