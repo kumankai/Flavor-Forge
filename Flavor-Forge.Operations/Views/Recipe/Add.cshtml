@@ -20,16 +20,38 @@
     <!-- Ingredients Section -->
     <div id="ingredients-container" class="mb-3">
         <h4>Ingredients</h4>
-        <!-- Initial ingredient input fields (ingredient name and quantity) -->
-        <div class="form-group">
-            <input type="text" name="Ingredients[0].Name" placeholder="Enter ingredient" class="form-control d-inline w-50" />
-            <input type="number" name="Ingredients[0].Quantity" placeholder="Quantity" class="form-control d-inline w-25 ms-2" />
-            <!-- Button to add more ingredients dynamically -->
-            <button type="button" class="btn btn-secondary ms-2" onclick="addIngredient()">Add Another Ingredient</button>
+        <div class="ingredients-list">
+            <div class="form-group">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <input type="text" name="Ingredients[0].Name" placeholder="Enter ingredient" class="form-control" />
+                    </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="Ingredients[0].Unit" class="form-control">
+                            <option value="">Select Unit</option>
+                            <option value="cup">Cup(s)</option>
+                            <option value="tbsp">Tablespoon(s)</option>
+                            <option value="tsp">Teaspoon(s)</option>
+                            <option value="oz">Ounce(s)</option>
+                            <option value="lb">Pound(s)</option>
+                            <option value="g">Gram(s)</option>
+                            <option value="ml">Milliliter(s)</option>
+                            <option value="piece">Piece(s)</option>
+                            <option value="pinch">Pinch</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-10">
+                <button type="button" class="btn btn-secondary w-100" onclick="addIngredient()">Add Another Ingredient</button>
+            </div>
         </div>
     </div>
 
-    <!-- Recipe Description Field -->
+    <!-- Recipe Instructions Field -->
     <div class="form-group mb-3">
         <!-- Label for Recipe Description -->
         @Html.Label("Instructions", "Instructions", new { @class = "form-label" })
@@ -53,18 +75,35 @@
 
     // Function to add new ingredient input fields dynamically
     function addIngredient() {
-        // Select the container where ingredients are displayed
-        const container = document.getElementById('ingredients-container');
+        const container = document.querySelector('.ingredients-list');
 
         // Create a new div element for the new ingredient input fields
         const newIngredient = document.createElement('div');
-        newIngredient.classList.add('form-group', 'mt-2'); // Add some styling classes
 
         // Set the HTML for the new ingredient input fields, with updated name attributes for model binding
         newIngredient.innerHTML = `
-                <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control d-inline w-50" />
-                <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control d-inline w-25 ms-2" />
-            `;
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
+                    </div>
+                    <div class="col-md-3">
+                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
+                            <option value="">Select Unit</option>
+                            <option value="cup">Cup(s)</option>
+                            <option value="tbsp">Tablespoon(s)</option>
+                            <option value="tsp">Teaspoon(s)</option>
+                            <option value="oz">Ounce(s)</option>
+                            <option value="lb">Pound(s)</option>
+                            <option value="g">Gram(s)</option>
+                            <option value="ml">Milliliter(s)</option>
+                            <option value="piece">Piece(s)</option>
+                            <option value="pinch">Pinch</option>
+                        </select>
+                    </div>
+                </div>`;
 
         // Append the new ingredient div to the container
         container.appendChild(newIngredient);

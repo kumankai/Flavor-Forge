@@ -1,26 +1,149 @@
 ﻿@model Flavor_Forge.Entities.Recipe
+
 @{
-    ViewData["Title"] = "Employee Details";
+    ViewData["Title"] = "Recipe Details";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Details of an Employee</h1>
+<div class="container py-5">
+    <!-- Recipe Header -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="text-center">
+                <h1 class="display-4 mb-3">@Model.Name</h1>
+                <div class="recipe-meta">
+                    <span class="badge bg-primary rounded-pill me-2">
+                        <i class="fas fa-list-ul me-1"></i>
+                        @Model.Ingredients?.Count Ingredients
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Content -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-4 p-md-5">
+                    <!-- Ingredients Section -->
+                    <section class="recipe-section mb-5">
+                        <h2 class="h4 mb-4">
+                            <i class="fas fa-shopping-basket text-primary me-2"></i>
+                            Ingredients
+                        </h2>
+                        <div class="ingredients-list">
+                            <ul class="list-unstyled">
+                                @foreach (var ingredient in Model.Ingredients)
+                                {
+                                    <li class="mb-3 d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-3"></i>
+                                        <span>@ingredient</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Instructions Section -->
+                    <section class="recipe-section">
+                        <h2 class="h4 mb-4">
+                            <i class="fas fa-utensils text-primary me-2"></i>
+                            Instructions
+                        </h2>
+                        <div class="instructions-content">
+                            <p class="recipe-instructions">@Model.Instructions</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-4">
+                <a class="btn btn-primary btn-lg me-2" asp-page="Index">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Back to Recipes
+                </a>
+                <a class="btn btn-outline-primary btn-lg" href="#" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>
+                    Print Recipe
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
-    <div>
-        <label type="text" asp-for="Id" class="control-label"></label>
-        <input asp-for="Id" class="form-control" readonly />
-    </div>
-    <div>
-        <label type="text" asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" readonly />
-    </div>
-    <div>
-        <label type="text" asp-for="Instructions" class="control-label"></label>
-        <input asp-for="Instructions" class="form-control" readonly />
-    </div>
-    <div>
-        <a class="btn btn-success" asp-page="Index">Show All Recipes</a>
-    </div>
-</div>
+<style>
+    /* General Styles */
+    body {
+        background-color: #f8f9fa;
+    }
+
+    /* Card Styles */
+    .card {
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+    /* Recipe Meta Styles */
+    .recipe-meta {
+        margin-bottom: 2rem;
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    /* Section Styles */
+    .recipe-section {
+        position: relative;
+    }
+
+    .recipe-section:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: -2rem;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(0,0,0,0.1);
+    }
+
+    /* Ingredients List Styles */
+    .ingredients-list li {
+        font-size: 1.1rem;
+        padding: 0.5rem 0;
+    }
+
+    .ingredients-list i {
+        font-size: 1.2rem;
+    }
+
+    /* Instructions Styles */
+    .recipe-instructions {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #2c3e50;
+        white-space: pre-line;
+    }
+
+    /* Button Styles */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+    }
+
+    .btn-lg {
+        padding: 1rem 2rem;
+    }
+
+    .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+    }
+</style>
