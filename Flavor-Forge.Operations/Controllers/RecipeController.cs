@@ -6,7 +6,7 @@ namespace Flavor_Forge.Operations.Controllers
     public class RecipeController : Controller
     {
 
-        public IActionResult AddRecipes()
+        public IActionResult Add()
         {
             return View();
         }
