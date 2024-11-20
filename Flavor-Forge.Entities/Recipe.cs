@@ -10,9 +10,16 @@ namespace Flavor_Forge.Entities
     public class Recipe
     {
         [Key]
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Instructions { get; set; }
-        public List<string>? Ingredients { get; set; }
+        public int RecipeId { get; set; }
+        public string Name { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public string Instructions { get; set; }
+    }
+
+    public class Ingredient
+    {
+        public string Name { get; set; }
+        public decimal Quantity { get; set; }
+        public string Unit { get; set; }
     }
 }
