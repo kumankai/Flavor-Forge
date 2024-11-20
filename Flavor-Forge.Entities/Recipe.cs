@@ -20,10 +20,6 @@ namespace Flavor_Forge.Entities
         [ForeignKey("User")]
         public int UserId { get; set; } 
         public virtual User User { get; set; } // Navigation property
-        public int RecipeId { get; set; }
-        public string Name { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
-        public string Instructions { get; set; }
     }
 
     public class Ingredient
