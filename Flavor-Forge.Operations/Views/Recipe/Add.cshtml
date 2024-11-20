@@ -1,5 +1,7 @@
 ﻿@model Flavor_Forge.Entities.Recipe
 
+<h1>Add Recipe</h1>
+
 @using (Html.BeginForm("CreateRecipe", "Recipe", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     <!-- Recipe Name Field -->
@@ -68,28 +70,28 @@
         newIngredient.classList.add('form-group', 'mt-2');
 
         newIngredient.innerHTML = `
-                <div class="row align-items-center">
-                    <div class="col-md-5">
-                        <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
-                    </div>
-                    <div class="col-md-3">
-                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
-                            <option value="">Select Unit</option>
-                            <option value="cup">Cup(s)</option>
-                            <option value="tbsp">Tablespoon(s)</option>
-                            <option value="tsp">Teaspoon(s)</option>
-                            <option value="oz">Ounce(s)</option>
-                            <option value="lb">Pound(s)</option>
-                            <option value="g">Gram(s)</option>
-                            <option value="ml">Milliliter(s)</option>
-                            <option value="piece">Piece(s)</option>
-                            <option value="pinch">Pinch</option>
-                        </select>
-                    </div>
-                </div>`;
+                    <div class="row align-items-center">
+                        <div class="col-md-5">
+                            <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
+                        </div>
+                        <div class="col-md-3">
+                            <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
+                                <option value="">Select Unit</option>
+                                <option value="cup">Cup(s)</option>
+                                <option value="tbsp">Tablespoon(s)</option>
+                                <option value="tsp">Teaspoon(s)</option>
+                                <option value="oz">Ounce(s)</option>
+                                <option value="lb">Pound(s)</option>
+                                <option value="g">Gram(s)</option>
+                                <option value="ml">Milliliter(s)</option>
+                                <option value="piece">Piece(s)</option>
+                                <option value="pinch">Pinch</option>
+                            </select>
+                        </div>
+                    </div>`;
 
         container.appendChild(newIngredient);
         ingredientIndex++;

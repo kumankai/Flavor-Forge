@@ -60,7 +60,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 recipe-card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">@recipe.Name</h5>
+                                <h5 class="card-title">@recipe.RecipeName</h5>
                                 <!-- Ingredients List -->
                                 <div class="ingredients-list mb-3">
                                     <h6 class="mb-2">Ingredients:</h6>
@@ -87,12 +87,11 @@
                 }
             </div>
         }
-        <!-- No Results Message -->
         else if (Context.Request.Query.Count > 0)
         {
-        <div class="alert alert-info text-center">
-            <i class="fas fa-info-circle me-2"></i>No recipes found with these ingredients. Try different ingredients!
-        </div>
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>No recipes found with these ingredients. Try different ingredients!
+            </div>
         }
     </div>
 </div>
