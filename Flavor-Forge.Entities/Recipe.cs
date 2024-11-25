@@ -14,8 +14,6 @@ namespace Flavor_Forge.Entities
         public int RecipeId { get; set; }
         public string? RecipeName { get; set; }
         public string? Instructions { get; set; }
-
-        [Required]
         public List<string>? Ingredients { get; set; }
         public string? Author { get; set; }
 

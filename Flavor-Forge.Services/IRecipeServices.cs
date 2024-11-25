@@ -14,6 +14,6 @@ namespace Flavor_Forge.Services
         Recipe GetRecipe(int recipeId);
         Recipe CreateRecipe(Recipe recipe);
         Recipe UpdateRecipe(Recipe recipe);
-        Recipe DeleteRecipe(int recipeId);
+        string DeleteRecipe(int recipeId);
     }
 }

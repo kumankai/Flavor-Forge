@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Flavor_Forge.Services
 {
-    public class RecipeRepository
+    public class RecipeRepository : IRecipeServices
     {
         private readonly Flavor_ForgeDBContext _flavor_forgeDBContext;
         public RecipeRepository(Flavor_ForgeDBContext context)
