@@ -10,12 +10,16 @@
         <div class="col-lg-8">
             <div class="text-center">
                 <h1 class="display-4 mb-3">@Model.RecipeName</h1>
-                <div class="recipe-meta">
+                <div class="recipe-meta mb-3">
                     <span class="badge bg-primary rounded-pill me-2">
                         <i class="fas fa-list-ul me-1"></i>
                         @Model.Ingredients?.Count Ingredients
                     </span>
                 </div>
+                <a class="btn btn-success" href="#" id="saveRecipeBtn">
+                    <i class="fas fa-bookmark me-2"></i>
+                    Save Recipe
+                </a>
             </div>
         </div>
     </div>
@@ -37,11 +41,7 @@
                                 {
                                     <li class="mb-3 d-flex align-items-center">
                                         <i class="fas fa-check-circle text-success me-3"></i>
-                                        <span>
-                                            <span class="quantity">@ingredient.Quantity</span>
-                                            <span class="unit">@ingredient.Unit</span>
-                                            @ingredient.Name
-                                        </span>
+                                        <span>@ingredient</span>
                                     </li>
                                 }
                             </ul>
@@ -63,9 +63,9 @@
 
             <!-- Action Buttons -->
             <div class="text-center mt-4">
-                <a class="btn btn-primary btn-lg me-2" asp-controller="Recipe" asp-action="ShowRecipes">
+                <a class="btn btn-primary btn-lg me-2" asp-controller="Recipe" asp-action="Search">
                     <i class="fas fa-arrow-left me-2"></i>
-                    Back to Recipes
+                    Back to Search
                 </a>
                 <a class="btn btn-outline-primary btn-lg" href="#" onclick="window.print()">
                     <i class="fas fa-print me-2"></i>
@@ -103,15 +103,15 @@
         position: relative;
     }
 
-    .recipe-section:not(:last-child)::after {
-        content: '';
-        position: absolute;
-        bottom: -2rem;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: rgba(0,0,0,0.1);
-    }
+        .recipe-section:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -2rem;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+        }
 
     /* Ingredients List Styles */
     .ingredients-list li {
@@ -161,9 +161,9 @@
         border-color: #0d6efd;
     }
 
-    .btn-primary:hover {
-        background-color: #0b5ed7;
-        border-color: #0a58ca;
-    }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
 
 </style>
