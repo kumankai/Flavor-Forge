@@ -1,4 +1,4 @@
-﻿@using Flavor_Forge.Entities;
+﻿@model Flavor_Forge.Entities.Recipe
 
 @{
     ViewData["Title"] = "Recipe Details";
@@ -13,8 +13,15 @@
                 <div class="recipe-meta">
                     <span class="badge bg-primary rounded-pill me-2">
                         <i class="fas fa-list-ul me-1"></i>
-                        @Model.Ingredients?.Count Ingredients
+                        @(Model.Ingredients?.Count ?? 0) Ingredients
                     </span>
+                    @if (!string.IsNullOrEmpty(Model.Author))
+                    {
+                        <span class="badge bg-secondary rounded-pill">
+                            <i class="fas fa-user me-1"></i>
+                            @Model.Author
+                        </span>
+                    }
                 </div>
             </div>
         </div>
@@ -33,16 +40,19 @@
                         </h2>
                         <div class="ingredients-list">
                             <ul class="list-unstyled">
-                                @foreach (var ingredient in Model.Ingredients)
+                                @if (Model.Ingredients != null)
                                 {
-                                    <li class="mb-3 d-flex align-items-center">
-                                        <i class="fas fa-check-circle text-success me-3"></i>
-                                        <span>
-                                            <span class="quantity">@ingredient.Quantity</span>
-                                            <span class="unit">@ingredient.Unit</span>
-                                            @ingredient.Name
-                                        </span>
-                                    </li>
+                                    @foreach (var ingredient in Model.Ingredients)
+                                    {
+                                        <li class="mb-3 d-flex align-items-center">
+                                            <i class="fas fa-check-circle text-success me-3"></i>
+                                            <span>
+                                                <span class="quantity">@ingredient.Quantity</span>
+                                                <span class="unit">@ingredient.Unit</span>
+                                                @ingredient.Name
+                                            </span>
+                                        </li>
+                                    }
                                 }
                             </ul>
                         </div>
@@ -63,7 +73,7 @@
 
             <!-- Action Buttons -->
             <div class="text-center mt-4">
-                <a class="btn btn-primary btn-lg me-2" asp-controller="Recipe" asp-action="ShowRecipes">
+                <a class="btn btn-primary btn-lg me-2" asp-action="ShowRecipes">
                     <i class="fas fa-arrow-left me-2"></i>
                     Back to Recipes
                 </a>
@@ -75,95 +85,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    /* General Styles */
-    body {
-        background-color: #f8f9fa;
-    }
-
-    /* Card Styles */
-    .card {
-        background: white;
-        transition: all 0.3s ease;
-    }
-
-    /* Recipe Meta Styles */
-    .recipe-meta {
-        margin-bottom: 2rem;
-    }
-
-    .badge {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-    }
-
-    /* Section Styles */
-    .recipe-section {
-        position: relative;
-    }
-
-    .recipe-section:not(:last-child)::after {
-        content: '';
-        position: absolute;
-        bottom: -2rem;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: rgba(0,0,0,0.1);
-    }
-
-    /* Ingredients List Styles */
-    .ingredients-list li {
-        font-size: 1.1rem;
-        padding: 0.5rem 0;
-    }
-
-    .ingredients-list i {
-        font-size: 1.2rem;
-    }
-
-    .ingredients-list span {
-        font-size: 1.1rem;
-    }
-
-    .ingredients-list .quantity {
-        font-weight: 600;
-        color: #0d6efd;
-        margin-right: 0.25rem;
-    }
-
-    .ingredients-list .unit {
-        color: #6c757d;
-        margin-right: 0.5rem;
-    }
-
-    /* Instructions Styles */
-    .recipe-instructions {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        color: #2c3e50;
-        white-space: pre-line;
-    }
-
-    /* Button Styles */
-    .btn {
-        padding: 0.75rem 1.5rem;
-        font-weight: 500;
-    }
-
-    .btn-lg {
-        padding: 1rem 2rem;
-    }
-
-    .btn-primary {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-
-    .btn-primary:hover {
-        background-color: #0b5ed7;
-        border-color: #0a58ca;
-    }
-
-</style>

@@ -1,4 +1,5 @@
 ﻿using Flavor_Forge.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,18 @@ namespace Flavor_Forge.Services
         public List<Recipe> GetRecipesByUserId(int userId)
         {
             return _flavor_forgeDBContext.Recipes
+                .Include(r => r.Ingredients)
                 .Where(r => r.UserId == userId)
                 .ToList();
         }
-        //Recipe GetRecipe(int recipeId);
+
         public Recipe GetRecipe(int recipeId)
         {
-            return _flavor_forgeDBContext.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+            return _flavor_forgeDBContext.Recipes
+                .Include(r => r.Ingredients)
+                .FirstOrDefault(r => r.RecipeId == recipeId);
         }
+
         //Recipe CreateRecipe(Recipe recipe);
         public Recipe CreateRecipe(Recipe recipe)
         {
