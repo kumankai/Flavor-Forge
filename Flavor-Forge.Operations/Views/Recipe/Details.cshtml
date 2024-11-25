@@ -1,4 +1,4 @@
-﻿@using Flavor_Forge.Entities;
+﻿@model Flavor_Forge.Entities.Recipe
 
 @{
     ViewData["Title"] = "Recipe Details";
@@ -13,8 +13,15 @@
                 <div class="recipe-meta mb-3">
                     <span class="badge bg-primary rounded-pill me-2">
                         <i class="fas fa-list-ul me-1"></i>
-                        @Model.Ingredients?.Count Ingredients
+                        @(Model.Ingredients?.Count ?? 0) Ingredients
                     </span>
+                    @if (!string.IsNullOrEmpty(Model.Author))
+                    {
+                        <span class="badge bg-secondary rounded-pill">
+                            <i class="fas fa-user me-1"></i>
+                            @Model.Author
+                        </span>
+                    }
                 </div>
                 <a class="btn btn-success" href="#" id="saveRecipeBtn">
                     <i class="fas fa-bookmark me-2"></i>
