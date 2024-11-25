@@ -21,11 +21,4 @@ namespace Flavor_Forge.Entities
         public int UserId { get; set; } 
         public virtual User User { get; set; } // Navigation property
     }
-
-    public class Ingredient
-    {
-        public string Name { get; set; }
-        public decimal Quantity { get; set; }
-        public string Unit { get; set; }
-    }
 }
