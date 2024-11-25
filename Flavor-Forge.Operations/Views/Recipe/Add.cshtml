@@ -14,16 +14,18 @@
     <div id="ingredients-container" class="mb-3">
         <h4>Ingredients</h4>
         <div class="ingredients-list">
-            <div class="form-group">
+            <div class="form-group ingredient-row">
                 <div class="row align-items-center">
                     <div class="col-md-5">
-                        <input type="text" name="Ingredients[0].Name" placeholder="Enter ingredient" class="form-control" />
+                        <input type="text" name="Ingredients[0].Name"
+                               placeholder="Enter ingredient" class="form-control" required />
                     </div>
                     <div class="col-md-2">
-                        <input type="number" name="Ingredients[0].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
+                        <input type="number" name="Ingredients[0].Quantity"
+                               placeholder="Quantity" class="form-control" step="0.1" required />
                     </div>
                     <div class="col-md-3">
-                        <select name="Ingredients[0].Unit" class="form-control">
+                        <select name="Ingredients[0].Unit" class="form-control" required>
                             <option value="">Select Unit</option>
                             <option value="cup">Cup(s)</option>
                             <option value="tbsp">Tablespoon(s)</option>
@@ -34,14 +36,20 @@
                             <option value="ml">Milliliter(s)</option>
                             <option value="piece">Piece(s)</option>
                             <option value="pinch">Pinch</option>
+                            <option value="whole">Whole</option>
                         </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm delete-ingredient">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-md-10">
-                <button type="button" class="btn btn-secondary w-100" onclick="addIngredient()">Add Another Ingredient</button>
+                <button type="button" class="btn btn-secondary w-100" id="addIngredientBtn" onclick="addIngredient()">Add Another Ingredient</button>
             </div>
         </div>
     </div>
@@ -62,38 +70,118 @@
 <!-- JavaScript for adding ingredients dynamically -->
 <script>
     let ingredientIndex = 1;
+    const MAX_INGREDIENTS = 20;
 
     function addIngredient() {
         const container = document.querySelector('.ingredients-list');
+        const currentCount = document.querySelectorAll('.ingredient-row').length;
 
+        // Check if maximum limit reached
+        if (currentCount >= MAX_INGREDIENTS) {
+            alert(`Maximum limit of ${MAX_INGREDIENTS} ingredients reached!`);
+            return;
+        }
+
+        // Create new ingredient row
         const newIngredient = document.createElement('div');
-        newIngredient.classList.add('form-group', 'mt-2');
+        newIngredient.classList.add('form-group', 'ingredient-row', 'mt-2');
 
+        // HTML template for new ingredient row
         newIngredient.innerHTML = `
-                    <div class="row align-items-center">
-                        <div class="col-md-5">
-                            <input type="text" name="Ingredients[${ingredientIndex}].Name" placeholder="Enter ingredient" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" name="Ingredients[${ingredientIndex}].Quantity" placeholder="Quantity" class="form-control" step="0.1" />
-                        </div>
-                        <div class="col-md-3">
-                            <select name="Ingredients[${ingredientIndex}].Unit" class="form-control">
-                                <option value="">Select Unit</option>
-                                <option value="cup">Cup(s)</option>
-                                <option value="tbsp">Tablespoon(s)</option>
-                                <option value="tsp">Teaspoon(s)</option>
-                                <option value="oz">Ounce(s)</option>
-                                <option value="lb">Pound(s)</option>
-                                <option value="g">Gram(s)</option>
-                                <option value="ml">Milliliter(s)</option>
-                                <option value="piece">Piece(s)</option>
-                                <option value="pinch">Pinch</option>
-                            </select>
-                        </div>
-                    </div>`;
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <input type="text" name="Ingredients[${ingredientIndex}].Name"
+                               placeholder="Enter ingredient" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity"
+                               placeholder="Quantity" class="form-control" step="0.1" required />
+                    </div>
+                    <div class="col-md-3">
+                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control" required>
+                            <option value="">Select Unit</option>
+                            <option value="cup">Cup(s)</option>
+                            <option value="tbsp">Tablespoon(s)</option>
+                            <option value="tsp">Teaspoon(s)</option>
+                            <option value="oz">Ounce(s)</option>
+                            <option value="lb">Pound(s)</option>
+                            <option value="g">Gram(s)</option>
+                            <option value="ml">Milliliter(s)</option>
+                            <option value="piece">Piece(s)</option>
+                            <option value="pinch">Pinch</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm delete-ingredient">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>`;
 
+        // Add the new row to the container
         container.appendChild(newIngredient);
         ingredientIndex++;
+
+        // Update the add button state
+        updateAddButtonState();
+
+        // Add event listener to the new delete button
+        attachDeleteListener(newIngredient.querySelector('.delete-ingredient'));
     }
+
+    function attachDeleteListener(button) {
+        button.addEventListener('click', function () {
+            deleteIngredient(this);
+        });
+    }
+
+    function deleteIngredient(button) {
+        const ingredientRow = button.closest('.ingredient-row');
+        const totalIngredients = document.querySelectorAll('.ingredient-row').length;
+
+        if (totalIngredients > 1) {
+            ingredientRow.remove();
+            reindexIngredients();
+            updateAddButtonState();
+        } else {
+            alert('Recipe must have at least one ingredient!');
+        }
+    }
+
+    function reindexIngredients() {
+        const ingredients = document.querySelectorAll('.ingredient-row');
+        ingredients.forEach((row, index) => {
+            const inputs = row.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                const name = input.getAttribute('name');
+                if (name) {
+                    input.setAttribute('name', name.replace(/\[\d+\]/, `[${index}]`));
+                }
+            });
+        });
+        ingredientIndex = ingredients.length;
+    }
+
+    function updateAddButtonState() {
+        const addButton = document.getElementById('addIngredientBtn');
+        const currentCount = document.querySelectorAll('.ingredient-row').length;
+
+        if (currentCount >= MAX_INGREDIENTS) {
+            addButton.disabled = true;
+            addButton.innerHTML = `Maximum ${MAX_INGREDIENTS} ingredients reached`;
+        } else {
+            addButton.disabled = false;
+            addButton.innerHTML = 'Add Another Ingredient';
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        // Attach delete listener to initial delete button
+        const initialDeleteButton = document.querySelector('.delete-ingredient');
+        if (initialDeleteButton) {
+            attachDeleteListener(initialDeleteButton);
+        }
+        updateAddButtonState();
+    });
 </script>
