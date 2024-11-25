@@ -14,11 +14,13 @@ namespace Flavor_Forge.Entities
         public int RecipeId { get; set; }
         public string? RecipeName { get; set; }
         public string? Instructions { get; set; }
+
+        [Required]
         public List<string>? Ingredients { get; set; }
         public string? Author { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; } 
-        public virtual User User { get; set; } // Navigation property
+        public virtual User? User { get; set; } // Navigation property
     }
 }
