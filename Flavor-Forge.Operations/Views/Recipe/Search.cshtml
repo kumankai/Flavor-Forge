@@ -10,7 +10,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
                         <!-- Search Form -->
-                        <form asp-controller="Recipe" asp-action="Search" method="get" id="searchForm">
+                        <form asp-controller="Recipe" asp-action="Search" method="post" id="searchForm">
                             <!-- Ingredient Input Section -->
                             <div class="ingredients-input mb-3">
                                 <label class="form-label">Enter Your Ingredients (Max 5)</label>
@@ -49,38 +49,27 @@
 
     <!-- Results Section -->
     <div class="results-section" id="resultsSection">
-        @if (Model != null && Model.Any())
+        @if (ViewBag.MealNames != null && ((List<string>)ViewBag.MealNames).Count > 0)
         {
-            <h3 class="mb-4">Found Recipes</h3>
+            <h3 class="mb-4">Found @(((List<string>)ViewBag.MealNames).Count) Recipes</h3>
             <!-- Recipe Cards Grid -->
             <div class="row g-4">
-                @foreach (var recipe in Model)
+                @foreach (var mealName in ViewBag.MealNames)
                 {
                     <!-- Individual Recipe Card -->
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 recipe-card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">@recipe.RecipeName</h5>
-                                <!-- Ingredients List -->
-                                <div class="ingredients-list mb-3">
-                                    <h6 class="mb-2">Ingredients:</h6>
-                                    <ul class="list-unstyled">
-                                        @foreach (var ingredient in recipe.Ingredients)
-                                        {
-                                            <li><i class="fas fa-check-circle text-success me-2"></i>@ingredient</li>
-                                        }
-                                    </ul>
-                                </div>
-                                <!-- Instructions Preview -->
-                                <div class="instructions-preview">
-                                    <h6 class="mb-2">Instructions:</h6>
-                                    <p class="card-text">@(recipe.Instructions?.Length > 100 ? recipe.Instructions.Substring(0, 100) + "..." : recipe.Instructions)</p>
-                                </div>
+                                <h5 class="card-title">@mealName</h5>
                             </div>
                             <!-- Card Footer with View Button -->
                             <div class="card-footer bg-white border-top-0">
-                                <a href="@Url.Action("Details", "Recipe", new { id = recipe.RecipeId })"
-                                   class="btn btn-outline-primary w-100">View Full Recipe</a>
+                                <a asp-controller="Recipe"
+                                   asp-action="Details"
+                                   asp-route-mealName="@mealName"
+                                   class="btn btn-outline-primary w-100">
+                                    View Full Recipe
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -148,9 +137,26 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Initialize variables
             const ingredients = new Set();
             const MAX_INGREDIENTS = 5;
+
+            // Add function to restore previous ingredients
+            function restorePreviousIngredients() {
+        @if (TempData["LastSearchIngredients"] != null)
+        {
+            <text>
+                            const previousIngredients = '@TempData["LastSearchIngredients"]'.split(',');
+                                previousIngredients.forEach(ingredient => {
+                                    if (ingredient) {
+                                addIngredientTag(ingredient);
+                                    }
+                                });
+            </text>
+        }
+                    }
+
+            // Call restore function when page loads
+            restorePreviousIngredients();
 
             // Update the ingredient counter and input states
             function updateIngredientCount() {
@@ -182,13 +188,13 @@
                     // Add ingredient to set and create tag element
                     ingredients.add(ingredient);
                     const tag = $(`
-                                <div class="ingredient-tag">
-                                    ${ingredient}
-                                    <button type="button" class="remove-tag border-0">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `);
+                                                <div class="ingredient-tag">
+                                                    ${ingredient}
+                                                    <button type="button" class="remove-tag border-0">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            `);
 
                     // Add click handler for remove button
                     tag.find('.remove-tag').click(function () {
@@ -236,6 +242,10 @@
                     alert('Please add at least one ingredient');
                     return false;
                 }
+
+                // Update the hidden input with all ingredients
+                $('#ingredientsList').val(Array.from(ingredients).join(','));
+
                 // Show loading state on button
                 $(this).find('button[type="submit"]')
                     .prop('disabled', true)
