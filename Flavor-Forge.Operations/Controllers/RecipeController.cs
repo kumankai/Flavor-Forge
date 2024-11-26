@@ -34,9 +34,9 @@ namespace Flavor_Forge.Operations.Controllers
                     {
                         RecipeName = mealData["strMeal"],
                         Instructions = mealData["strInstructions"],
-                        Ingredients = new List<string>(),
                         ImageUrl = mealData["strMealThumb"],
-                        Author = "TheMealDB" // or you could leave it null
+                        Ingredients = new List<string>(),
+                        Author = "TheMealDB"
                     };
 
                     // Process ingredients
@@ -79,30 +79,15 @@ namespace Flavor_Forge.Operations.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string ingredients)
         {
-            // Search result output
-            var mealNames = new List<string>();
+            var meals = new List<dynamic>();
             using var httpClient = new HttpClient();
 
-            // Split the comma-separated string into a list
             var ingredientList = ingredients.Split(',').ToList();
 
             foreach (var ingredient in ingredientList)
             {
                 string url = $"https://www.themealdb.com/api/json/v1/1/filter.php?i={ingredient.Trim()}";
 
-                /* API response format
-                 * {
-                 *  meals: [
-                 *      {
-                 *          strMeal
-                 *          strThumb
-                 *          idMeal
-                 *      },
-                 *      {},
-                 *      {}
-                 *      ]
-                 * }
-                 */
                 try
                 {
                     string jsonResponse = await httpClient.GetStringAsync(url);
@@ -110,11 +95,13 @@ namespace Flavor_Forge.Operations.Controllers
 
                     if (response != null && response.ContainsKey("meals") && response["meals"] != null)
                     {
-                        var mealsForIngredient = response["meals"]
-                            .Select(meal => meal["strMeal"])
-                            .ToList();
+                        var mealsForIngredient = response["meals"].Select(meal => new
+                        {
+                            Name = meal["strMeal"],
+                            ImageUrl = meal["strMealThumb"]
+                        });
 
-                        mealNames.AddRange(mealsForIngredient);
+                        meals.AddRange(mealsForIngredient);
                     }
                 }
                 catch (Exception ex)
@@ -123,8 +110,7 @@ namespace Flavor_Forge.Operations.Controllers
                 }
             }
 
-            // Remove duplicates and store in ViewBag
-            ViewBag.MealNames = mealNames.Distinct().ToList();
+            ViewBag.Meals = meals.DistinctBy(m => m.Name).ToList();
             return View();
         }
     }

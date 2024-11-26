@@ -49,24 +49,25 @@
 
     <!-- Results Section -->
     <div class="results-section" id="resultsSection">
-        @if (ViewBag.MealNames != null && ((List<string>)ViewBag.MealNames).Count > 0)
+        @if (ViewBag.Meals != null && ((List<dynamic>)ViewBag.Meals).Count > 0)
         {
-            <h3 class="mb-4">Found @(((List<string>)ViewBag.MealNames).Count) Recipes</h3>
+            <h3 class="mb-4">Found @(((List<dynamic>)ViewBag.Meals).Count) Recipes</h3>
             <!-- Recipe Cards Grid -->
             <div class="row g-4">
-                @foreach (var mealName in ViewBag.MealNames)
+                @foreach (var meal in (List<dynamic>)ViewBag.Meals)
                 {
                     <!-- Individual Recipe Card -->
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 recipe-card shadow-sm">
+                            <img src="@meal.ImageUrl" class="card-img-top recipe-thumbnail" alt="@meal.Name">
                             <div class="card-body">
-                                <h5 class="card-title">@mealName</h5>
+                                <h5 class="card-title">@meal.Name</h5>
                             </div>
                             <!-- Card Footer with View Button -->
                             <div class="card-footer bg-white border-top-0">
                                 <a asp-controller="Recipe"
                                    asp-action="Details"
-                                   asp-route-mealName="@mealName"
+                                   asp-route-mealName="@meal.Name"
                                    class="btn btn-outline-primary w-100">
                                     View Full Recipe
                                 </a>
@@ -131,6 +132,33 @@
     .btn:disabled {
         cursor: not-allowed;
     }
+
+    /* Recipe Card Image Styles */
+    .recipe-thumbnail {
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: calc(0.375rem - 1px);
+        border-top-right-radius: calc(0.375rem - 1px);
+    }
+
+    .card-title {
+        margin-bottom: 0;
+        font-size: 1.1rem;
+        font-weight: 500;
+        padding: 1rem;
+    }
+
+    .recipe-card {
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 0;
+    }
+
+    .card-footer {
+        padding: 1rem;
+    }
 </style>
 
 <!-- JavaScript Section -->
@@ -146,14 +174,14 @@
         {
             <text>
                             const previousIngredients = '@TempData["LastSearchIngredients"]'.split(',');
-                                previousIngredients.forEach(ingredient => {
-                                    if (ingredient) {
+                                            previousIngredients.forEach(ingredient => {
+                                                if (ingredient) {
                                 addIngredientTag(ingredient);
-                                    }
-                                });
+                                                }
+                                            });
             </text>
         }
-                    }
+                            }
 
             // Call restore function when page loads
             restorePreviousIngredients();
@@ -188,13 +216,13 @@
                     // Add ingredient to set and create tag element
                     ingredients.add(ingredient);
                     const tag = $(`
-                                                <div class="ingredient-tag">
-                                                    ${ingredient}
-                                                    <button type="button" class="remove-tag border-0">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                            `);
+                                                        <div class="ingredient-tag">
+                                                            ${ingredient}
+                                                            <button type="button" class="remove-tag border-0">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    `);
 
                     // Add click handler for remove button
                     tag.find('.remove-tag').click(function () {
