@@ -5,16 +5,15 @@
 <!-- Link to account.css -->
 <!--<link href="~/css/account.css" rel="stylesheet" type="text/css" />-->
 <div class="pt-5">
-    <h1 class="text-center">Register Page</h1>
+    <h1 class="text-center">Register</h1>
     <div class="container">
         <div class="row">
             <div class="col-md-5 mx-auto">
                 <div class="card card-body">
-                    @using (Html.BeginForm("Register", "AuthController", FormMethod.Post, new { id = "submitForm", @class = "form", data_parsley_validate = "true", novalidate = "true" }))
+                    <!-- Register form -->
+                    @using (Html.BeginForm("Register", "Auth"))
                     {
                         @Html.AntiForgeryToken()
-
-                        <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
 
                         <div class="form-group required">
                             @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
@@ -30,22 +29,60 @@
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group mt-4 mb-4">
-                            <div class="custom-control custom-checkbox">
-                                @Html.CheckBox("RememberMe", new { @class = "custom-control-input", @id = "remember-me", data_parsley_multiple = "remember-me" })
-                                <label class="custom-control-label" for="remember-me">Remember me?</label>
-                            </div>
+                        <div class="form-group required">
+                            <label class="d-flex flex-row align-items-center" for="confirmPassword">
+                                Confirm Password
+                            </label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required="required" />
+                            <span id="passwordError" class="text-danger"></span>
                         </div>
 
                         <div class="form-group pt-1">
-                            <button class="btn btn-primary btn-block" type="submit">Register</button>
+                            <button class="btn btn-primary btn-block" type="submit" id="registerButton">Register</button>
                         </div>
                     }
+                    <p class="small-xl pt-3 text-center">
+                        <span class="text-muted">Already have an account?</span>
+                        <a href="@Url.Action("Login","Auth")">Log In</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#submitForm').on('submit', function (e) {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    $('#passwordError').text('Passwords do not match');
+                    return false;
+                }
+
+                $('#passwordError').text('');
+                return true;
+            });
+
+            // Real-time validation
+            $('#confirmPassword').on('input', function () {
+                var password = $('#password').val();
+                var confirmPassword = $(this).val();
+
+                if (password !== confirmPassword) {
+                    $('#passwordError').text('Passwords do not match');
+                } else {
+                    $('#passwordError').text('');
+                }
+            });
+        });
+    </script>
+}
+
 <style>
     body {
         background: #f8f9fa !important;
@@ -83,4 +120,14 @@
             background: #0d6efd;
             border: #0d6efd;
         }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
 </style>

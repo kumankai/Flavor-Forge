@@ -10,139 +10,145 @@
 </head>
 <body>
     <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-        <div class="container">
-            <!-- Brand -->
-            <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-                <i class="fas fa-utensils me-2"></i>
-                <span>Flavor Forge</span>
-            </a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+            <div class="container">
+                <!-- Brand -->
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-utensils me-2"></i>
+                    <span>Flavor Forge</span>
+                </a>
 
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Nav Content -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Main Navigation -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Recipe" asp-action="Search">
-                            <i class="fas fa-search me-1"></i> Search Recipes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Recipe" asp-action="Add">
-                            <i class="fas fa-plus-circle me-1"></i> Add Recipe
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Auth Navigation -->
-                <ul class="navbar-nav">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle me-1"></i> My Account
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Profile" asp-action="Index">
-                                        <i class="fas fa-user me-2"></i> Profile
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Recipe" asp-action="MyRecipes">
-                                        <i class="fas fa-book-open me-2"></i> My Recipes
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form asp-controller="Account" asp-action="Logout" method="post">
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    else
-                    {
+                <!-- Nav Content -->
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Main Navigation -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Auth" asp-action="Login">
-                                <i class="fas fa-sign-in-alt me-1"></i> Login
+                            <a class="nav-link" asp-controller="Recipe" asp-action="Search">
+                                <i class="fas fa-search me-1"></i> Search Recipes
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-primary text-white px-3 rounded-pill ms-2" 
-                               asp-controller="Auth" asp-action="Register">
-                                <i class="fas fa-user-plus me-1"></i> Sign Up
+                            <a class="nav-link" asp-controller="Recipe" asp-action="Add">
+                                <i class="fas fa-plus-circle me-1"></i> Add Recipe
                             </a>
                         </li>
-                    }
-                </ul>
+                    </ul>
+
+                    <!-- Auth Navigation -->
+                    <ul class="navbar-nav">
+                        @{
+                            var userId = Context.Request.Cookies["UserId"];
+                        }
+
+                        @if (!string.IsNullOrEmpty(userId))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle me-1"></i> My Account
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Profile" asp-action="Index">
+                                            <i class="fas fa-user me-2"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Recipe" asp-action="MyRecipes">
+                                            <i class="fas fa-book-open me-2"></i> My Recipes
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-controller="Auth" asp-action="Logout" method="post">
+                                            <input type="hidden" name="userId" value="@userId" />
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Auth" asp-action="Login">
+                                    <i class="fas fa-sign-in-alt me-1"></i> Login
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-primary text-white px-3 rounded-pill ms-2"
+                                   asp-controller="Auth" asp-action="Register">
+                                    <i class="fas fa-user-plus me-1"></i> Sign Up
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 
-<style>
-    /* Add padding to body for fixed navbar */
-    body {
-        padding-top: 4.5rem;
-    }
+    <style>
+        /* Add padding to body for fixed navbar */
+        body {
+            padding-top: 4.5rem;
+        }
 
-    /* Navbar Styling */
-    .navbar {
-        padding: 0.8rem 0;
-    }
+        /* Navbar Styling */
+        .navbar {
+            padding: 0.8rem 0;
+        }
 
-    .navbar-brand {
-        font-weight: 600;
-        font-size: 1.5rem;
-        color: #0d6efd !important;
-        font-family: 'Monotype Corsiva';
-    }
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #0d6efd !important;
+            font-family: 'Monotype Corsiva';
+        }
 
-    .nav-link {
-        font-weight: 500;
-        color: #4a4a4a !important;
-        padding: 0.5rem 1rem !important;
-        transition: color 0.2s ease-in-out;
-    }
+        .nav-link {
+            font-weight: 500;
+            color: #4a4a4a !important;
+            padding: 0.5rem 1rem !important;
+            transition: color 0.2s ease-in-out;
+        }
 
-    .nav-link:hover {
-        color: #0d6efd !important;
-    }
+            .nav-link:hover {
+                color: #0d6efd !important;
+            }
 
-    /* Dropdown Styling */
-    .dropdown-menu {
-        border: none;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        border-radius: 0.5rem;
-    }
+        /* Dropdown Styling */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
+        }
 
-    .dropdown-item {
-        padding: 0.7rem 1.5rem;
-        font-weight: 500;
-    }
+        .dropdown-item {
+            padding: 0.7rem 1.5rem;
+            font-weight: 500;
+        }
 
-    .dropdown-item:hover {
-        background-color: #f8f9fa;
-    }
+            .dropdown-item:hover {
+                background-color: #f8f9fa;
+            }
 
-    /* Sign Up Button */
-    .btn-primary.nav-link:hover {
-        color: white !important;
-        background-color: #0b5ed7 !important;
-    }
-    }
-</style> 
+        /* Sign Up Button */
+        .btn-primary.nav-link:hover {
+            color: white !important;
+            background-color: #0b5ed7 !important;
+        }
+
+        }
+    </style>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

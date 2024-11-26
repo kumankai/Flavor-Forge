@@ -10,7 +10,7 @@ namespace Flavor_Forge.Services
     public interface IAuthServices
     {
         Task<User?> Register(User user);
-        Task<bool> Login(string username, string password);
+        Task<User?> Login(string username, string password);
         Task<bool> Logout(int userId);
         Task<bool> UserExists(string username);
     }

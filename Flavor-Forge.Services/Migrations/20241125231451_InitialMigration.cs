@@ -17,8 +17,7 @@ namespace Flavor_Forge.Services.Migrations
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(type: "TEXT", maxLength: 16, nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    IsLoggedIn = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Password = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

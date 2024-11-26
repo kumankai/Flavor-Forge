@@ -12,34 +12,6 @@ namespace Flavor_Forge.Services
             _flavor_forgeDBContext = context;
         }
 
-        public async Task<bool> Login(string username, string password)
-        {
-            var user = await _flavor_forgeDBContext.Users
-                .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower()
-                                     && u.Password == password);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            user.IsLoggedIn = true;
-            return true;
-        }
-
-        public async Task<bool> Logout(int userId)
-        {
-            var user = await _flavor_forgeDBContext.Users.FindAsync(userId);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            user.IsLoggedIn = false;
-            return true;
-        }
-
         public async Task<User?> Register(User user)
         {
 
@@ -51,6 +23,29 @@ namespace Flavor_Forge.Services
             _flavor_forgeDBContext.Users.Add(user);
             _flavor_forgeDBContext.SaveChanges();
             return user;
+        }
+
+        public async Task<User?> Login(string username, string password)
+        {
+            var user = await _flavor_forgeDBContext.Users
+                .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower()
+                                     && u.Password == password);
+
+            // Returns user or null
+            return user;
+        }
+
+        public async Task<bool> Logout(int userId)
+        {
+            var user = await _flavor_forgeDBContext.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                // Logout not successful
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<bool> UserExists(string username)

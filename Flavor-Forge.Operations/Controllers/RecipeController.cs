@@ -78,6 +78,7 @@ namespace Flavor_Forge.Operations.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string ingredients)
         {
+            // Search result output
             var mealNames = new List<string>();
             using var httpClient = new HttpClient();
 
@@ -88,6 +89,19 @@ namespace Flavor_Forge.Operations.Controllers
             {
                 string url = $"https://www.themealdb.com/api/json/v1/1/filter.php?i={ingredient.Trim()}";
 
+                /* API response format
+                 * {
+                 *  meals: [
+                 *      {
+                 *          strMeal
+                 *          strThumb
+                 *          idMeal
+                 *      },
+                 *      {},
+                 *      {}
+                 *      ]
+                 * }
+                 */
                 try
                 {
                     string jsonResponse = await httpClient.GetStringAsync(url);

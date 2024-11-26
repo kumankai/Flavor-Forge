@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flavor_Forge.Services.Migrations
 {
     [DbContext(typeof(Flavor_ForgeDBContext))]
-    [Migration("20241125190906_InitialMigration")]
+    [Migration("20241125231451_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -76,9 +76,6 @@ namespace Flavor_Forge.Services.Migrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsLoggedIn")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Password")
