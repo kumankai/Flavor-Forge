@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Register";
 }
+<link href='https://fonts.googleapis.com/css?family=IBM+Plex+Serif' rel='stylesheet'>
 <div class="login-root">
     <div class="box-root flex-flex flex-direction--column"
          style="min-height: 100vh; flex-grow: 1">
@@ -16,7 +17,7 @@
                     rgb(247, 250, 252) 33%
                   );
                   flex-grow: 1;
-                ">
+                "></div>
                 </div>
                 <div class="box-root flex-flex" style="grid-area: 4 / 2 / auto / 5">
                     <div class="box-root box-divider--light-all-2 animationLeftRight tans3s"
@@ -65,64 +66,67 @@
                     Sign Up
                 </h1>
             </div>
-    <!-- If invalid credentials -->
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
-
-    <!-- Login form -->
-    <div class="formbg-outer">
-        <div class="formbg">
-            <!-- Login form -->
-            @using (Html.BeginForm("Register", "Auth"))
+            <!-- If invalid credentials -->
+            @if (TempData["ErrorMessage"] != null)
             {
-                @Html.AntiForgeryToken()
-
-                <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
-                <div class="formbg-inner padding-horizontal--48">
-                    <span class="padding-bottom--15">Sign up for an account</span>
-                    <form id="stripe-login">
-                        <div class="field padding-bottom--24">
-                            @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
-                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
-                        </div>
-                        <div class="field padding-bottom--24">
-                            @Html.LabelFor(m => m.Password, "Password", new { @for = "password" })
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="field padding-bottom--24">
-                            <label class="d-flex flex-row align-items-center" for="confirmPassword">
-                                Confirm Password
-                            </label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required="required" />
-                            <span id="passwordError" class="text-danger"></span>
-                        </div>
-
-                        <div class="field padding-bottom--24">
-                            <button class="btn" type="submit" name="submit">Sign Up</button>
-                        </div>
-                    </form>
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
                 </div>
             }
 
-        </div>
-        <div class="footer-link padding-top--24">
-            <span>Already have an account? <a href="@Url.Action("Login","Auth")">Login</a></span>
-            <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">
-                <span><a href="#">Contact</a></span>
-                <span><a href="#">Privacy & terms</a></span>
+            <!-- Login form -->
+            <div class="formbg-outer">
+                <div class="formbg">
+                    <!-- Login form -->
+                    @using (Html.BeginForm("Register", "Auth"))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
+                        <div class="formbg-inner padding-horizontal--48">
+                            <span class="padding-bottom--15">Sign in to your account</span>
+                            <form id="stripe-login">
+                                <div class="field padding-bottom--24">
+                                    @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
+                                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="field padding-bottom--24">
+                                    @Html.LabelFor(m => m.Password, "Password", new { @for = "password" })
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group required">
+                                    <label class="d-flex flex-row align-items-center" for="confirmPassword">
+                                        Confirm Password
+                                    </label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required="required" />
+                                    <span id="passwordError" class="text-danger"></span>
+                                </div>
+                                <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
+                                    <label for="checkbox">
+                                        <input type="checkbox" name="checkbox" /> Remember me
+                                    </label>
+                                </div>
+                                <div class="field padding-bottom--24">
+                                    <button type="submit" name="submit">Sign Up</button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+
+                </div>
+                <div class="footer-link padding-top--24">
+                    <span>Don't have an account? <a href="@Url.Action("Login","Auth")"> Login</a></span>
+                    <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">
+                        <span><a href="#">Contact</a></span>
+                        <span><a href="#">Privacy & terms</a></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-    </div>
-</div>
-
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -156,16 +160,6 @@
 }
 
 <style>
-    body {
-        background: #f8f9fa !important;
-    }
-
-    h1 {
-        color: black;
-        padding-bottom: 2rem;
-        font-weight: bold;
-    }
-
     a {
         color: #333;
     }
@@ -210,6 +204,15 @@
     a {
         color: #0876fc;
         text-decoration: unset;
+    }
+
+    .login-root {
+        background: #fff;
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+        font-family: 'IBM Plex Serif',Serif;
     }
 
     .loginbackground {
