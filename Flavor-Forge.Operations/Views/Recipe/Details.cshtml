@@ -9,6 +9,10 @@
     <div class="row justify-content-center mb-5">
         <div class="col-lg-8">
             <div class="text-center">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.RecipeName" class="recipe-image mb-4">
+                }
                 <h1 class="display-4 mb-3">@Model.RecipeName</h1>
                 <div class="recipe-meta mb-3">
                     <span class="badge bg-primary rounded-pill me-2">
@@ -173,4 +177,12 @@
             border-color: #0a58ca;
         }
 
+    /* Recipe Image Styles */
+    .recipe-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
 </style>

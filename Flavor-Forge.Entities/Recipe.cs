@@ -15,6 +15,7 @@ namespace Flavor_Forge.Entities
         public string? RecipeName { get; set; }
         public string? Instructions { get; set; }
         public List<string>? Ingredients { get; set; }
+        public string? ImageUrl { get; set; }
         public string? Author { get; set; }
 
         [ForeignKey("User")]

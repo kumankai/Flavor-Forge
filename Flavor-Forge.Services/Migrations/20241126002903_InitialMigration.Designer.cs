@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flavor_Forge.Services.Migrations
 {
     [DbContext(typeof(Flavor_ForgeDBContext))]
-    [Migration("20241125231451_InitialMigration")]
+    [Migration("20241126002903_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -51,6 +51,9 @@ namespace Flavor_Forge.Services.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("TEXT");
 
                     b.PrimitiveCollection<string>("Ingredients")

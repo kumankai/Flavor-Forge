@@ -35,6 +35,7 @@ namespace Flavor_Forge.Operations.Controllers
                         RecipeName = mealData["strMeal"],
                         Instructions = mealData["strInstructions"],
                         Ingredients = new List<string>(),
+                        ImageUrl = mealData["strMealThumb"],
                         Author = "TheMealDB" // or you could leave it null
                     };
 

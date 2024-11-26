@@ -50,6 +50,9 @@ namespace Flavor_Forge.Services.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("TEXT");
+
                     b.PrimitiveCollection<string>("Ingredients")
                         .HasColumnType("TEXT");
 

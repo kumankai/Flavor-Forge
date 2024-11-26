@@ -33,6 +33,7 @@ namespace Flavor_Forge.Services.Migrations
                     RecipeName = table.Column<string>(type: "TEXT", nullable: true),
                     Instructions = table.Column<string>(type: "TEXT", nullable: true),
                     Ingredients = table.Column<string>(type: "TEXT", nullable: true),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
                     Author = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
