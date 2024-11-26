@@ -15,4 +15,5 @@ namespace Flavor_Forge.Services
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
     }
-}
+      
+    }

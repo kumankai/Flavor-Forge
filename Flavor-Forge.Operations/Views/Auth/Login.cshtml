@@ -2,105 +2,364 @@
 @{
     ViewBag.Title = "Login";
 }
-<div class="pt-5">
-    <h1 class="text-center">Login</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-5 mx-auto">
-                <div class="card card-body">
-                    <!-- If invalid credentials -->
-                    @if (TempData["ErrorMessage"] != null)
-                    {
-                        <div class="alert alert-danger">
-                            @TempData["ErrorMessage"]
-                        </div>
-                    }
+<div class="login-root">
+    <div class="box-root flex-flex flex-direction--column"
+         style="min-height: 100vh; flex-grow: 1">
+        <div class="loginbackground box-background--white padding-top--64">
+            <div class="loginbackground-gridContainer">
+                <div class="box-root flex-flex"
+                     style="grid-area: top / start / 8 / end">
+                    <div class="box-root"
+                         style="
+                  background-image: linear-gradient(
+                    white 0%,
+                    rgb(247, 250, 252) 33%
+                  );
+                  flex-grow: 1;
+                "></div>
+                </div>
+                <div class="box-root flex-flex" style="grid-area: 4 / 2 / auto / 5">
+                    <div class="box-root box-divider--light-all-2 animationLeftRight tans3s"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex"
+                     style="grid-area: 6 / start / auto / 2">
+                    <div class="box-root box-background--blue800"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex"
+                     style="grid-area: 7 / start / auto / 4">
+                    <div class="box-root box-background--blue animationLeftRight"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex" style="grid-area: 8 / 4 / auto / 6">
+                    <div class="box-root box-background--gray100 animationLeftRight tans3s"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex"
+                     style="grid-area: 2 / 15 / auto / end">
+                    <div class="box-root box-background--cyan200 animationRightLeft tans4s"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex"
+                     style="grid-area: 3 / 14 / auto / end">
+                    <div class="box-root box-background--blue animationRightLeft"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex"
+                     style="grid-area: 4 / 17 / auto / 20">
+                    <div class="box-root box-background--gray100 animationRightLeft tans4s"
+                         style="flex-grow: 1"></div>
+                </div>
+                <div class="box-root flex-flex"
+                     style="grid-area: 5 / 14 / auto / 17">
+                    <div class="box-root box-divider--light-all-2 animationRightLeft tans3s"
+                         style="flex-grow: 1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="box-root padding-top--24 flex-flex flex-direction--column"
+             style="flex-grow: 1; z-index: 9">
+            <div class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center">
+                <h1>
+                    Login Page
+                </h1>
+            </div>
+            <!-- If invalid credentials -->
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
 
+            <!-- Login form -->
+            <div class="formbg-outer">
+                <div class="formbg">
                     <!-- Login form -->
                     @using (Html.BeginForm("Login", "Auth"))
                     {
                         @Html.AntiForgeryToken()
 
                         <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
-
-                        <div class="form-group required">
-                            @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
-                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
-                        </div>
-
-                        <div class="form-group required">
-                            <label class="d-flex flex-row align-items-center" for="password">
-                                @Html.LabelFor(m => m.Password, "Password", new { @class = "mr-auto" })
-                            </label>
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
-                        </div>
-
-                        <div class="form-group pt-1">
-                            <button class="btn btn-primary btn-block" type="submit">Log In</button>
+                        <div class="formbg-inner padding-horizontal--48">
+                            <span class="padding-bottom--15">Sign in to your account</span>
+                            <form id="stripe-login">
+                                <div class="field padding-bottom--24">
+                                    @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
+                                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
+                                </div>
+                                <div class="field padding-bottom--24">
+                                        @Html.LabelFor(m => m.Password, "Password", new { @for="password"})
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
+                                </div>                                
+                                <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
+                                    <label for="checkbox">
+                                        <input type="checkbox" name="checkbox"/> Remember me
+                                    </label>
+                                </div>
+                                <div class="field padding-bottom--24">
+                                    <button type="submit" name="submit">Log In</button>
+                                </div>
+                            </form>
                         </div>
                     }
-
-                    <!-- Register button -->
-                    <p class="small-xl pt-3 text-center">
-                        <span class="text-muted">Not a member?</span>
-                        <a href="@Url.Action("Register","Auth")">Sign up</a>
-                    </p>
+                   
+                </div>
+                <div class="footer-link padding-top--24">
+                    <span>Don't have an account? <a href="@Url.Action("Register","Auth")"> Sign up</a></span>
+                    <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">
+                        <span><a href="#">Contact</a></span>
+                        <span><a href="#">Privacy & terms</a></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <style>
-    body {
-        background: #f8f9fa !important;
-    }
 
     h1 {
-        color: black;
-        padding-bottom: 2rem;
-        font-weight: bold;
+        letter-spacing: -1px;
     }
 
     a {
-        color: #333;
+        color: #0876fc;
+        text-decoration: unset;
     }
 
-        a:hover {
-            color: #0d6efd;
-            text-decoration: none;
-        }
+    .loginbackground {
+        min-height: 692px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 0;
+        overflow: hidden;
+    }
 
-    .form-control:focus {
-        color: #000;
-        background-color: #fff;
-        border: 2px solid #0d6efd;
+    .flex-flex {
+        display: flex;
+    }
+
+    .align-center {
+        align-items: center;
+    }
+
+    .center-center {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .box-root {
+        box-sizing: border-box;
+    }
+
+    .flex-direction--column {
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+
+    .loginbackground-gridContainer {
+        display: -ms-grid;
+        display: grid;
+        -ms-grid-columns: [start] 1fr [left-gutter] (86.6px)[16] [left-gutter] 1fr [end];
+        grid-template-columns: [start] 1fr [left-gutter] repeat(16,86.6px) [left-gutter] 1fr [end];
+        -ms-grid-rows: [top] 1fr [top-gutter] (64px)[8] [bottom-gutter] 1fr [bottom];
+        grid-template-rows: [top] 1fr [top-gutter] repeat(8,64px) [bottom-gutter] 1fr [bottom];
+        justify-content: center;
+        margin: 0 -2%;
+        transform: rotate(-12deg) skew(-12deg);
+    }
+
+    .box-divider--light-all-2 {
+        box-shadow: inset 0 0 0 2px #e3e8ee;
+    }
+
+    .box-background--blue {
+        background-color: #0876fc;
+    }
+
+    .box-background--white {
+        background-color: #ffffff;
+    }
+
+    .box-background--blue800 {
+        background-color: #0431f8;
+    }
+
+    .box-background--gray100 {
+        background-color: #e3e8ee;
+    }
+
+    .box-background--cyan200 {
+        background-color: #7fd3ed;
+    }
+
+    .padding-top--64 {
+        padding-top: 64px;
+    }
+
+    .padding-top--24 {
+        padding-top: 24px;
+    }
+
+    .padding-top--48 {
+        padding-top: 48px;
+    }
+
+    .padding-bottom--24 {
+        padding-bottom: 24px;
+    }
+
+    .padding-horizontal--48 {
+        padding: 48px;
+    }
+
+    .padding-bottom--15 {
+        padding-bottom: 15px;
+    }
+
+
+    .flex-justifyContent--center {
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+    .formbg {
+        margin: 0px auto;
+        width: 100%;
+        max-width: 448px;
+        background: white;
+        border-radius: 4px;
+        box-shadow: rgba(60, 66, 87, 0.12) 0px 7px 14px 0px, rgba(0, 0, 0, 0.12) 0px 3px 6px 0px;
+    }
+
+    span {
+        display: block;
+        font-size: 20px;
+        line-height: 28px;
+        color: #1a1f36;
+    }
+
+    label {
+        margin-bottom: 10px;
+    }
+
+    .grid--50-50 {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        align-items: center;
+    }
+
+    .field input {
+        font-size: 16px;
+        line-height: 28px;
+        padding: 8px 16px;
+        width: 100%;
+        min-height: 44px;
+        border: unset;
+        border-radius: 4px;
+        outline-color: rgb(84 105 212 / 0.5);
+        background-color: rgb(255, 255, 255);
+        box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+    }
+
+    button[type="submit"] {
+        background-color: #0876fc;
+        box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, rgb(84, 105, 212) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
+        color: #fff;
+        border: 0;
+        font-weight: 600;
+        box-sizing: border-box;
+        height: 50px;
         outline: 0;
-        box-shadow: none;
+        margin-top: 38px;
+        border-radius: 12px;
+        text-align: center;
+        width: 100%;
+        cursor: pointer;
     }
 
-    .btn {
-        background: #0d6efd;
-        border: #0d6efd;
+    .field-checkbox input {
+        width: 20px;
+        height: 15px;
+        margin-right: 5px;
+        box-shadow: unset;
+        min-height: unset;
     }
 
-        .btn:hover {
-            background: #0d6efd;
-            border: #0d6efd;
-        }
-
-    .alert-danger {
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-        color: #721c24;
-        padding: 0.75rem 1.25rem;
-        margin-bottom: 1rem;
-        border: 1px solid transparent;
-        border-radius: 0.25rem;
+    .field-checkbox label {
+        display: flex;
+        align-items: center;
+        margin: 0;
     }
 
-    .validation-summary-errors ul {
-        list-style: none;
-        padding-left: 0;
-        margin-bottom: 0;
+    a.ssolink {
+        display: block;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .footer-link span {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .listing a {
+        color: #697386;
+        font-weight: 600;
+        margin: 0 10px;
+    }
+
+    .animationRightLeft {
+        animation: animationRightLeft 2s ease-in-out infinite;
+    }
+
+    .animationLeftRight {
+        animation: animationLeftRight 2s ease-in-out infinite;
+    }
+
+    .tans3s {
+        animation: animationLeftRight 3s ease-in-out infinite;
+    }
+
+    .tans4s {
+        animation: animationLeftRight 4s ease-in-out infinite;
+    }
+
+    @@keyframes animationLeftRight {
+        0%
+
+    {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(1000px);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+
+    }
+
+    @@keyframes animationRightLeft {
+        0%
+
+    {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(-1000px);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+
     }
 </style>
