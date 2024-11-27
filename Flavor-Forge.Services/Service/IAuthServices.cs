@@ -13,5 +13,7 @@ namespace Flavor_Forge.Services.Service
         Task<User?> LoginAsync(string username, string password);
         Task<bool> LogoutAsync(int userId);
         Task<bool> UserExistsAsync(string username);
+
+        Task<bool> CheckPassword(string password, int userId);
     }
 }
