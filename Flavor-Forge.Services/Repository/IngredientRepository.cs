@@ -1,11 +1,12 @@
 ﻿using Flavor_Forge.Entities;
+using Flavor_Forge.Services.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flavor_Forge.Services
+namespace Flavor_Forge.Services.Repository
 {
     public class IngredientRepository : IIngredientServices
     {

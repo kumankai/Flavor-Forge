@@ -1,23 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Flavor_Forge.Entities;
-using Flavor_Forge.Services;
+using Flavor_Forge.Services.Service;
+using Flavor_Forge.Operations.Services;
 
 namespace Flavor_Forge.Operations.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthServices _authServices;
+        private readonly ICookiesServices _cookiesServices;
 
-        public AuthController(IAuthServices authServices)
+        public AuthController(IAuthServices authServices, ICookiesServices cookiesServices)
         {
             _authServices = authServices;
+            _cookiesServices = cookiesServices;
         }
 
         [HttpGet]
         public IActionResult Register()
         {
             // Check if the "userId" cookie exists
-            if (Request.Cookies.ContainsKey("userId"))
+            if (_cookiesServices.GetCookie("UserId") != null)
             {
                 // Redirect to home
                 return RedirectToAction("Index", "Home");
@@ -46,9 +49,8 @@ namespace Flavor_Forge.Operations.Controllers
                 return StatusCode(500, "An error occurred during registration.");
             }
 
-            var options = new CookieOptions { HttpOnly = true, Secure = true };
-            Response.Cookies.Append("UserId", registeredUser.UserId.ToString(), options);
-            Response.Cookies.Append("Username", registeredUser.Username, options);
+            _cookiesServices.SetCookie("UserId", registeredUser.UserId.ToString());
+            _cookiesServices.SetCookie("Username", registeredUser.Username.ToString());
 
             return RedirectToAction("Index", "Home");
         }
@@ -57,7 +59,7 @@ namespace Flavor_Forge.Operations.Controllers
         public IActionResult Login()
         {
             // Check if the "userId" cookie exists
-            if (Request.Cookies.ContainsKey("userId"))
+            if (_cookiesServices.GetCookie("UserId") != null)
             {
                 // Redirect to home
                 return RedirectToAction("Index", "Home");
@@ -85,9 +87,8 @@ namespace Flavor_Forge.Operations.Controllers
                 return View(user);
             }
 
-            var options = new CookieOptions { HttpOnly = true, Secure = true };
-            Response.Cookies.Append("UserId", validUser.UserId.ToString(), options);
-            Response.Cookies.Append("Username", validUser.Username, options);
+            _cookiesServices.SetCookie("UserId", validUser.UserId.ToString());
+            _cookiesServices.SetCookie("Username", validUser.Username.ToString());
 
             return RedirectToAction("Index", "Home");
         }
@@ -95,8 +96,9 @@ namespace Flavor_Forge.Operations.Controllers
         [HttpPost]
         public IActionResult Logout()
         {
-            // Remove authentication cookie
-            Response.Cookies.Delete("UserId");
+            // Remove authentication cookies
+            _cookiesServices.DeleteCookie("UserId");
+            _cookiesServices.DeleteCookie("Username");
 
             return RedirectToAction("Index", "Home");
         }

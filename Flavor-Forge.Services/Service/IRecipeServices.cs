@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flavor_Forge.Services
+namespace Flavor_Forge.Services.Service
 {
     public interface IRecipeServices
     {
@@ -15,5 +15,6 @@ namespace Flavor_Forge.Services
         Recipe CreateRecipe(Recipe recipe);
         Recipe UpdateRecipe(Recipe recipe);
         string DeleteRecipe(int recipeId);
+        bool CheckSavedRecipe(string recipeName, int userId);
     }
 }

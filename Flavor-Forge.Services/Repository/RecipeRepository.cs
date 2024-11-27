@@ -1,11 +1,12 @@
 ﻿using Flavor_Forge.Entities;
+using Flavor_Forge.Services.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flavor_Forge.Services
+namespace Flavor_Forge.Services.Repository
 {
     public class RecipeRepository : IRecipeServices
     {
@@ -46,6 +47,15 @@ namespace Flavor_Forge.Services
             _flavor_forgeDBContext.Recipes.Remove(GetRecipe(recipeId));
             _flavor_forgeDBContext.SaveChanges();
             return "Recipe Deleted";
+        }
+        public bool CheckSavedRecipe(string recipeName, int userId)
+        {
+            var recipes = GetRecipesByUserId(userId);
+            if (recipes.Any(r => r.RecipeName == recipeName))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

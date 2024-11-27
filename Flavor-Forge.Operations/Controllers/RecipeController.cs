@@ -1,5 +1,6 @@
 ﻿using Flavor_Forge.Entities;
-using Flavor_Forge.Services;
+using Flavor_Forge.Services.Service;
+using Flavor_Forge.Operations.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using System.Net.Http;
@@ -10,17 +11,21 @@ namespace Flavor_Forge.Operations.Controllers
     public class RecipeController : Controller
     {
         private readonly IRecipeServices _recipeServices;
+        private readonly ICookiesServices _cookiesServices;
+        private readonly IImageServices _imageServices;
 
-        public RecipeController(IRecipeServices recipeServices)
+        public RecipeController(IRecipeServices recipeServices, ICookiesServices cookiesServices, IImageServices imageServices)
         {
             _recipeServices = recipeServices;
+            _cookiesServices = cookiesServices;
+            _imageServices = imageServices;
         }
 
         [HttpGet]
         public IActionResult Add()
         {
             // Check if the "userId" cookie doesnt exists
-            if (!Request.Cookies.ContainsKey("userId"))
+            if (_cookiesServices.GetCookie("UserId") == null)
             {
                 // Redirect to Login
                 return RedirectToAction("Login", "Auth");
@@ -28,67 +33,40 @@ namespace Flavor_Forge.Operations.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Recipe recipe, IFormFile ImageFile)
+        public async Task<IActionResult> Add(Recipe recipe, IFormFile imageFile)
         {
             try
             {
-                // Check if user is logged in
-                if (!Request.Cookies.ContainsKey("UserId"))
+                string userIdCookie = _cookiesServices.GetCookie("UserId");
+
+                if (userIdCookie == null)
                 {
                     return RedirectToAction("Login", "Auth");
                 }
 
-                int userId = int.Parse(Request.Cookies["UserId"]);
-                string username = Request.Cookies["Username"]; // Make sure you have this cookie set during login
+                int userId = int.Parse(userIdCookie);
+                string username = _cookiesServices.GetCookie("Username");
 
-                // Validate image
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (imageFile != null)
                 {
-                    // Check file size (5MB max)
-                    if (ImageFile.Length > 5 * 1024 * 1024)
+                    if (!_imageServices.ValidateImage(imageFile, out string errorMessage))
                     {
-                        TempData["ErrorMessage"] = "Image file size must be less than 5MB";
+                        TempData["ErrorMessage"] = errorMessage;
                         return RedirectToAction("Add");
                     }
 
-                    // Check file type
-                    var allowedTypes = new[] { "image/jpeg", "image/jpg", "image/png" };
-                    if (!allowedTypes.Contains(ImageFile.ContentType.ToLower()))
-                    {
-                        TempData["ErrorMessage"] = "Only JPG and PNG images are allowed";
-                        return RedirectToAction("Add");
-                    }
-
-                    // Generate unique filename
-                    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImageFile.FileName)}";
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recipe-images", fileName);
-                    var fileUrl = $"/recipe-images/{fileName}";
-
-                    // Create directory if it doesn't exist
-                    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recipe-images"));
-
-                    // Save image
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await ImageFile.CopyToAsync(stream);
-                    }
-
-                    // Set image URL
-                    recipe.ImageUrl = fileUrl;
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recipe-images");
+                    recipe.ImageUrl = await _imageServices.SaveImageAsync(imageFile, folderPath);
                 }
 
-                // Set recipe properties
                 recipe.UserId = userId;
                 recipe.Author = username;
 
-                // Process ingredients if they're in the form data
-                // Note: You'll need to modify this based on how you're handling ingredients in the form
                 if (recipe.Ingredients == null)
                 {
                     recipe.Ingredients = new List<string>();
                 }
 
-                // Save recipe
                 _recipeServices.CreateRecipe(recipe);
 
                 TempData["SuccessMessage"] = "Recipe added successfully!";
@@ -161,17 +139,18 @@ namespace Flavor_Forge.Operations.Controllers
         {
             try
             {
+                string userIdCookie = _cookiesServices.GetCookie("UserId");
+
                 // Check if user is logged in
-                if (!Request.Cookies.ContainsKey("UserId"))
+                if (userIdCookie == null)
                 {
                     return RedirectToAction("Login", "Auth");
                 }
 
-                int userId = int.Parse(Request.Cookies["UserId"]);
+                int userId = int.Parse(userIdCookie);
 
                 // Check if user has already saved this recipe
-                var existingRecipes = _recipeServices.GetRecipesByUserId(userId);
-                if (existingRecipes.Any(r => r.RecipeName == recipe.RecipeName))
+                if (_recipeServices.CheckSavedRecipe(recipe.RecipeName, userId))
                 {
                     TempData["ErrorMessage"] = "You have already saved this recipe!";
                     return RedirectToAction("Details", new { mealName = recipe.RecipeName });
@@ -241,61 +220,38 @@ namespace Flavor_Forge.Operations.Controllers
         {
             try
             {
-                // Check if user is logged in
-                if (!Request.Cookies.ContainsKey("UserId"))
+                string userIdCookie = _cookiesServices.GetCookie("UserId");
+
+                if (userIdCookie == null)
                 {
                     return RedirectToAction("Login", "Auth");
                 }
 
-                int userId = int.Parse(Request.Cookies["UserId"]);
-                string username = Request.Cookies["Username"];
+                int userId = int.Parse(userIdCookie);
+                string username = _cookiesServices.GetCookie("Username");
 
-                // Get the recipe
                 var recipe = _recipeServices.GetRecipe(recipeId);
 
-                // Check if recipe exists and belongs to the current user
                 if (recipe == null || recipe.UserId != userId)
                 {
                     TempData["ErrorMessage"] = "Recipe not found or you don't have permission to delete it.";
                     return RedirectToAction("Profile", "User");
                 }
 
-                // If the user is the author (not TheMealDB), delete the image file
                 if (recipe.Author == username && !string.IsNullOrEmpty(recipe.ImageUrl))
                 {
-                    try
-                    {
-                        // Get the file path from the ImageUrl
-                        string fileName = Path.GetFileName(recipe.ImageUrl);
-                        string filePath = Path.Combine(
-                            Directory.GetCurrentDirectory(),
-                            "wwwroot",
-                            "recipe-images",
-                            fileName
-                        );
-
-                        // Check if file exists before attempting to delete
-                        if (System.IO.File.Exists(filePath))
-                        {
-                            System.IO.File.Delete(filePath);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Log the error but continue with recipe deletion
-                        Console.WriteLine($"Error deleting image file: {ex.Message}");
-                    }
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recipe-images");
+                    _imageServices.DeleteImage(recipe.ImageUrl, folderPath);
                 }
 
-                // Delete the recipe
                 _recipeServices.DeleteRecipe(recipeId);
 
-                TempData["SuccessMessage"] = "Recipe unsaved successfully.";
+                TempData["SuccessMessage"] = "Recipe deleted successfully.";
                 return RedirectToAction("Profile", "User");
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error unsaving recipe: " + ex.Message;
+                TempData["ErrorMessage"] = "Error deleting recipe: " + ex.Message;
                 return RedirectToAction("Profile", "User");
             }
         }

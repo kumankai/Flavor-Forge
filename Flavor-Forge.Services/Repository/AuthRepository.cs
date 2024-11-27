@@ -1,7 +1,8 @@
 ﻿using Flavor_Forge.Entities;
+using Flavor_Forge.Services.Service;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flavor_Forge.Services
+namespace Flavor_Forge.Services.Repository
 {
     public class AuthRepository : IAuthServices
     {

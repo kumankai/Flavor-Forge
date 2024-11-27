@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flavor_Forge.Services
+namespace Flavor_Forge.Services.Service
 {
     public interface IUserServices
     {
