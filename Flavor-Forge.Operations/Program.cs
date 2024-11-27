@@ -1,5 +1,6 @@
 using Flavor_Forge.Entities;
-using Flavor_Forge.Operations.Services;
+using Flavor_Forge.Operations.Services.Repository;
+using Flavor_Forge.Operations.Services.Service;
 using Flavor_Forge.Services;
 using Flavor_Forge.Services.Repository;
 using Flavor_Forge.Services.Service;

@@ -1,4 +1,6 @@
-﻿namespace Flavor_Forge.Operations.Services
+﻿using Flavor_Forge.Operations.Services.Service;
+
+namespace Flavor_Forge.Operations.Services.Repository
 {
     public class ImageRepository : IImageServices
     {

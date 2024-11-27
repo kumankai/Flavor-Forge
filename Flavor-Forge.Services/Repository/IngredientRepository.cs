@@ -1,5 +1,6 @@
 ﻿using Flavor_Forge.Entities;
 using Flavor_Forge.Services.Service;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,25 @@ namespace Flavor_Forge.Services.Repository
             _flavor_forgeDBContext.Ingredients.Add(ingredient);
             _flavor_forgeDBContext.SaveChanges();
             return ingredient;
+        }
+
+        public void SaveIngredients(List<Ingredient> ingredients, int recipeId)
+        {
+            if (ingredients == null || !ingredients.Any())
+            {
+                throw new ArgumentException("Ingredients list cannot be null or empty.");
+            }
+
+            foreach (var ingredient in ingredients)
+            {
+                if (ingredient != null && !string.IsNullOrEmpty(ingredient.IngredientName))
+                {
+                    ingredient.RecipeId = recipeId;
+                    _flavor_forgeDBContext.Ingredients.Add(ingredient);
+                }
+            }
+
+            _flavor_forgeDBContext.SaveChanges();
         }
     }
 }

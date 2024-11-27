@@ -1,6 +1,6 @@
 ﻿using Flavor_Forge.Entities;
 
-namespace Flavor_Forge.Operations.Services
+namespace Flavor_Forge.Operations.Services.Service
 {
     public interface ITheMealDbServices
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Flavor_Forge.Entities;
 using Flavor_Forge.Services.Service;
-using Flavor_Forge.Operations.Services;
+using Flavor_Forge.Operations.Services.Service;
 
 namespace Flavor_Forge.Operations.Controllers
 {

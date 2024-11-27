@@ -1,10 +1,10 @@
 ﻿using Flavor_Forge.Entities;
 using Flavor_Forge.Services.Service;
-using Flavor_Forge.Operations.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using System.Net.Http;
 using System.Text.Json;
+using Flavor_Forge.Operations.Services.Service;
 
 namespace Flavor_Forge.Operations.Controllers
 {
@@ -37,7 +37,7 @@ namespace Flavor_Forge.Operations.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Recipe recipe, IFormFile imageFile, List<Ingredient> Ingredients)
+        public async Task<IActionResult> Add(Recipe recipe, IFormFile imageFile, List<Ingredient> ingredients)
         {
             try
             {
@@ -71,17 +71,10 @@ namespace Flavor_Forge.Operations.Controllers
                 // Save the recipe first to get the RecipeId
                 var savedRecipe = _recipeServices.CreateRecipe(recipe);
 
-                // Save each ingredient
-                if (Ingredients != null && Ingredients.Any())
+                // Save each ingredients
+                if (ingredients != null && ingredients.Any())
                 {
-                    foreach (var ingredient in Ingredients)
-                    {
-                        if (ingredient != null && !string.IsNullOrEmpty(ingredient.IngredientName))
-                        {
-                            ingredient.RecipeId = savedRecipe.RecipeId;
-                            _ingredientServices.SaveIngredient(ingredient);
-                        }
-                    }
+                    _ingredientServices.SaveIngredients(ingredients, savedRecipe.RecipeId);
                 }
 
                 TempData["SuccessMessage"] = "Recipe added successfully!";
@@ -164,18 +157,10 @@ namespace Flavor_Forge.Operations.Controllers
                 // Save the recipe and get the saved recipe with its ID
                 var savedRecipe = _recipeServices.CreateRecipe(recipe);
 
-                // Save ingredients if they exist
+                // Save ingredients
                 if (ingredients != null && ingredients.Any())
                 {
-                    foreach (var ingredient in ingredients)
-                    {
-                        if (ingredient != null && !string.IsNullOrEmpty(ingredient.IngredientName))
-                        {
-                            // Set the RecipeId for each ingredient
-                            ingredient.RecipeId = savedRecipe.RecipeId;
-                            _ingredientServices.SaveIngredient(ingredient);
-                        }
-                    }
+                    _ingredientServices.SaveIngredients(ingredients, savedRecipe.RecipeId);
                 }
 
                 TempData["SuccessMessage"] = "Recipe Saved Successfully!";

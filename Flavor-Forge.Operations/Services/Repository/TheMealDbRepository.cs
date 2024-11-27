@@ -1,7 +1,8 @@
 ﻿using Flavor_Forge.Entities;
+using Flavor_Forge.Operations.Services.Service;
 using System.Text.Json;
 
-namespace Flavor_Forge.Operations.Services
+namespace Flavor_Forge.Operations.Services.Repository
 {
     public class TheMealDbRepository : ITheMealDbServices
     {

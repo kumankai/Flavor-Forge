@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Flavor_Forge.Operations.Services.Service;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Flavor_Forge.Operations.Services
+namespace Flavor_Forge.Operations.Services.Repository
 {
     public class CookiesRepository : ICookiesServices
     {
@@ -23,7 +24,7 @@ namespace Flavor_Forge.Operations.Services
 
             _httpContextAccessor.HttpContext?.Response.Cookies.Append(key, value, cookieOptions);
         }
-        
+
         public string? GetCookie(string key)
         {
             return _httpContextAccessor.HttpContext?.Request.Cookies[key];

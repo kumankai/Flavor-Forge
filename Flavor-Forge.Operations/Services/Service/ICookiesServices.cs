@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Flavor_Forge.Operations.Services
+namespace Flavor_Forge.Operations.Services.Service
 {
     public interface ICookiesServices
     {
