@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Flavor_Forge.Operations.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header>
@@ -55,7 +56,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                     <li>
-                                        <a class="dropdown-item" asp-controller="Profile" asp-action="Index">
+                                        <a class="dropdown-item" asp-controller="User" asp-action="Profile">
                                             <i class="fas fa-user me-2"></i> Profile
                                         </a>
                                     </li>
@@ -66,8 +67,7 @@
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
-                                        <form asp-controller="Auth" asp-action="Logout" method="post">
-                                            <input type="hidden" name="userId" value="@userId" />
+                                        <form asp-controller="Auth" asp-action="Logout" method="post" id="logoutForm">
                                             <button type="submit" class="dropdown-item text-danger">
                                                 <i class="fas fa-sign-out-alt me-2"></i> Logout
                                             </button>

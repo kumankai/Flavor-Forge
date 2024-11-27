@@ -8,71 +8,53 @@
         <h1 class="display-4 mb-4">Find Delicious Recipes</h1>
         <p class="lead mb-5">Enter ingredients you have, and we'll show you what you can cook!</p>
 
-        <!-- Search Box -->
+        <!-- Find Recipe Button -->
         <div class="row justify-content-center mb-5">
             <div class="col-md-8">
-                <form asp-controller="Recipe" asp-action="Search" method="get" class="search-form">
-                    <div class="input-group input-group-lg shadow-sm">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Enter ingredients (e.g., chicken, rice, tomatoes)"
-                               name="ingredients"
-                               id="ingredientSearch">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Find Recipes
-                        </button>
-                    </div>
-                </form>
+                @Html.ActionLink("Find Recipes", "Search", "Recipe", null,
+                         new { @class = "btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm find-recipes-btn" })
             </div>
         </div>
 
         <!-- Popular Categories -->
         <div class="categories-section mb-5">
-            <h2 class="h4 mb-4">Popular Categories</h2>
+            <h2 class="h4 mb-4">What you can find</h2>
             <div class="row justify-content-center g-4">
                 <div class="col-6 col-md-3">
-                    <a href="#" class="category-card">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-clock mb-3 text-primary"></i>
-                                <h5 class="card-title">Quick & Easy</h5>
-                                <p class="card-text small">Ready in 30 minutes</p>
-                            </div>
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-clock mb-3 text-primary"></i>
+                            <h5 class="card-title">Quick & Easy</h5>
+                            <p class="card-text small">Ready in 30 minutes</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="#" class="category-card">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-leaf mb-3 text-success"></i>
-                                <h5 class="card-title">Vegetarian</h5>
-                                <p class="card-text small">Plant-based dishes</p>
-                            </div>
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-leaf mb-3 text-success"></i>
+                            <h5 class="card-title">Vegetarian</h5>
+                            <p class="card-text small">Plant-based dishes</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="#" class="category-card">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-fire mb-3 text-danger"></i>
-                                <h5 class="card-title">Trending</h5>
-                                <p class="card-text small">Most popular now</p>
-                            </div>
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-fire mb-3 text-danger"></i>
+                            <h5 class="card-title">Trending</h5>
+                            <p class="card-text small">Most popular now</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="#" class="category-card">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-heart mb-3 text-danger"></i>
-                                <h5 class="card-title">Healthy</h5>
-                                <p class="card-text small">Nutritious meals</p>
-                            </div>
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-heart mb-3 text-danger"></i>
+                            <h5 class="card-title">Healthy</h5>
+                            <p class="card-text small">Nutritious meals</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,59 +69,41 @@
         padding: 3rem 1rem;
     }
 
-    .search-form .input-group {
-        background: white;
-        border-radius: 50px;
-        overflow: hidden;
-    }
-
-    .search-form .form-control {
-        border: none;
-        padding: 15px 25px;
-    }
-
-    .search-form .form-control:focus {
-        box-shadow: none;
-    }
-
-    .search-form .btn {
-        padding: 15px 30px;
-        border: none;
+    .btn-primary {
         background: #0d6efd;
-        color: white;
+        border: none;
+        transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .category-card {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        transition: transform 0.2s;
-    }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+        }
 
-    .category-card:hover {
-        transform: translateY(-5px);
-        color: inherit;
-    }
-
-    .category-card .card {
+    .card {
         border-radius: 10px;
         text-align: center;
     }
 
-    .category-card i {
-        font-size: 2rem;
-    }
+        .card i {
+            font-size: 2rem;
+        }
 
     .card-text {
         color: #6c757d;
+    }
+
+    .find-recipes-btn::before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f002"; /* search icon */
+        font-weight: 900;
+        margin-right: 0.5rem;
     }
 </style>
 
 @section Scripts {
     <script>
-        // Add autocomplete or other interactive features here if needed
-        $(document).ready(function() {
-            // Example: Initialize tooltips
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

@@ -35,7 +35,8 @@ namespace Flavor_Forge.Operations.Controllers
 
             if (await _authServices.UserExists(user.Username))
             {
-                return Conflict("Username already exists.");
+                TempData["ErrorMessage"] = "Username / Email already exists";
+                return View(user);
             }
 
             var registeredUser = await _authServices.Register(user);
@@ -73,8 +74,10 @@ namespace Flavor_Forge.Operations.Controllers
                 return View(user);
             }
 
+            // Authenticate User
             var validUser = await _authServices.Login(user.Username, user.Password);
 
+            // If user is invalid
             if (validUser == null)
             {
                 TempData["ErrorMessage"] = "Invalid username or password.";

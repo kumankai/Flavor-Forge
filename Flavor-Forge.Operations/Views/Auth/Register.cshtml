@@ -66,13 +66,6 @@
                     Sign Up
                 </h1>
             </div>
-            <!-- If invalid credentials -->
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["ErrorMessage"]
-                </div>
-            }
 
             <!-- Login form -->
             <div class="formbg-outer">
@@ -85,6 +78,14 @@
                         <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
                         <div class="formbg-inner padding-horizontal--48">
                             <span class="padding-bottom--15">Sign in to your account</span>
+
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="alert alert-danger mb-3">
+                                    <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                                </div>
+                            }
+
                             <form id="stripe-login">
                                 <div class="field padding-bottom--24">
                                     @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
@@ -212,8 +213,16 @@
         width: 100%;
         min-height: 100vh;
         overflow: hidden;
-        font-family: 'IBM Plex Serif',Serif;
+        font-family: 'IBM Plex Serif', serif;
     }
+
+        .login-root h1,
+        .login-root span,
+        .login-root label,
+        .login-root input,
+        .login-root button {
+            font-family: 'IBM Plex Serif', serif;
+        }
 
     .loginbackground {
         min-height: 692px;
@@ -350,7 +359,7 @@
         border-radius: 4px;
         outline-color: rgb(84 105 212 / 0.5);
         background-color: rgb(255, 255, 255);
-        box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+        box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;
     }
 
     button[type="submit"] {
@@ -442,5 +451,26 @@
         100% {
             transform: translateX(0px);
         }
+    }
+
+    .alert {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .me-2 {
+        margin-right: 0.5rem;
     }
 </style>

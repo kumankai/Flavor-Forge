@@ -1,1 +1,94 @@
-﻿
+﻿@model List<Flavor_Forge.Entities.Recipe>
+@{
+    ViewData["Title"] = "Profile";
+    var username = ViewBag.Username;
+}
+
+<div class="container py-5">
+    <!-- Profile Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h2 class="mb-0">@username</h2>
+        </div>
+    </div>
+
+    <!-- Saved Recipes Section -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Saved Recipes</h3>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var recipe in Model)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 recipe-card shadow-sm">
+                                @if (!string.IsNullOrEmpty(recipe.ImageUrl))
+                                {
+                                    <img src="@recipe.ImageUrl" class="card-img-top recipe-thumbnail" alt="@recipe.RecipeName">
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title">@recipe.RecipeName</h5>
+                                    <p class="card-text text-muted">
+                                        <small>By @recipe.Author</small>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-white border-top-0">
+                                    <a href="@Url.Action("Details", "Recipe", new { id = recipe.RecipeId })"
+                                       class="btn btn-outline-primary w-100">
+                                        View Full Recipe
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>You haven't saved any recipes yet.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .recipe-card {
+        transition: transform 0.2s;
+        border: none;
+        overflow: hidden;
+    }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .recipe-thumbnail {
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: calc(0.375rem - 1px);
+        border-top-right-radius: calc(0.375rem - 1px);
+    }
+
+    .card-title {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        padding: 1rem 1rem 0 1rem;
+    }
+
+    .card-text {
+        padding: 0 1rem;
+    }
+
+    .card-body {
+        padding: 0;
+    }
+
+    .card-footer {
+        padding: 1rem;
+    }
+</style>

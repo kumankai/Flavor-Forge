@@ -11,7 +11,12 @@ namespace Flavor_Forge.Operations.Controllers
 
         public IActionResult Add()
         {
-
+            // Check if the "userId" cookie doesnt exists
+            if (!Request.Cookies.ContainsKey("userId"))
+            {
+                // Redirect to Login
+                return RedirectToAction("Login", "Auth");
+            }
             return View();
         }
 
