@@ -10,5 +10,6 @@ namespace Flavor_Forge.Services.Service
     public interface IIngredientServices
     {
         List<Ingredient> GetIngredients(int recipeId);
+        Ingredient SaveIngredient(Ingredient ingredient);
     }
 }

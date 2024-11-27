@@ -17,7 +17,7 @@
                 <div class="recipe-meta mb-3">
                     <span class="badge bg-primary rounded-pill me-2">
                         <i class="fas fa-list-ul me-1"></i>
-                        @(Model.Ingredients?.Count ?? 0) Ingredients
+                        @(ViewBag.Ingredients?.Count ?? 0) Ingredients
                     </span>
                     @if (!string.IsNullOrEmpty(Model.Author))
                     {
@@ -32,7 +32,16 @@
                     @Html.HiddenFor(m => m.ImageUrl)
                     @Html.HiddenFor(m => m.Author)
                     @Html.HiddenFor(m => m.Instructions)
-                    @Html.HiddenFor(m => m.Ingredients)
+
+                    @if (ViewBag.Ingredients != null)
+                    {
+                        for (int i = 0; i < ViewBag.Ingredients.Count; i++)
+                        {
+                            <input type="hidden" name="ingredients[@i].IngredientName" value="@ViewBag.Ingredients[i].IngredientName" />
+                            <input type="hidden" name="ingredients[@i].Quantity" value="@ViewBag.Ingredients[i].Quantity" />
+                            <input type="hidden" name="ingredients[@i].Unit" value="@ViewBag.Ingredients[i].Unit" />
+                        }
+                    }
 
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-bookmark me-2"></i>
@@ -49,23 +58,33 @@
             <div class="card shadow-lg border-0 rounded-3">
                 <div class="card-body p-4 p-md-5">
                     <!-- Ingredients Section -->
-                    <section class="recipe-section mb-5">
-                        <h2 class="h4 mb-4">
+                    <div class="ingredients-section mb-4">
+                        <h4 class="mb-3">
                             <i class="fas fa-shopping-basket text-primary me-2"></i>
                             Ingredients
-                        </h2>
-                        <div class="ingredients-list">
-                            <ul class="list-unstyled">
-                                @foreach (var ingredient in Model.Ingredients)
+                        </h4>
+                        <ul class="ingredients-list">
+                            @if (ViewBag.Ingredients != null)
+                            {
+                                @foreach (var ingredient in ViewBag.Ingredients)
                                 {
-                                    <li class="mb-3 d-flex align-items-center">
-                                        <i class="fas fa-check-circle text-success me-3"></i>
-                                        <span>@ingredient</span>
+                                    <li>
+                                        <div class="ingredient-measure">
+                                            @if (ingredient.Quantity != 0)
+                                            {
+                                                <span class="quantity">@ingredient.Quantity</span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(ingredient.Unit))
+                                            {
+                                                <span class="unit">@ingredient.Unit</span>
+                                            }
+                                        </div>
+                                        <span class="ingredient-name">@ingredient.IngredientName</span>
                                     </li>
                                 }
-                            </ul>
-                        </div>
-                    </section>
+                            }
+                        </ul>
+                    </div>
 
                     <!-- Instructions Section -->
                     <section class="recipe-section">
@@ -132,29 +151,69 @@
             background: rgba(0,0,0,0.1);
         }
 
-    /* Ingredients List Styles */
-    .ingredients-list li {
-        font-size: 1.1rem;
-        padding: 0.5rem 0;
+    /* Updated Ingredients List Styles */
+    .ingredients-section {
+        background-color: #f8f9fa;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
     }
 
-    .ingredients-list i {
-        font-size: 1.2rem;
+    .ingredients-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
-    .ingredients-list span {
-        font-size: 1.1rem;
+        .ingredients-list li {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+            .ingredients-list li:last-child {
+                border-bottom: none;
+            }
+
+    .ingredient-measure {
+        min-width: 120px;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
     }
 
-    .ingredients-list .quantity {
+    .quantity {
         font-weight: 600;
         color: #0d6efd;
-        margin-right: 0.25rem;
+        font-size: 1.1rem;
     }
 
-    .ingredients-list .unit {
+    .unit {
         color: #6c757d;
-        margin-right: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: lowercase;
+    }
+
+    .ingredient-name {
+        font-size: 1.1rem;
+        color: #2c3e50;
+    }
+
+    /* Add hover effect */
+    .ingredients-list li:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+        border-radius: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin: 0 -1rem;
+        transition: all 0.2s ease;
+    }
+
+    /* Remove the old ingredient styles that might conflict */
+    .ingredients-section li span:first-child,
+    .ingredients-section li span:nth-child(2) {
+        min-width: unset;
     }
 
     /* Instructions Styles */

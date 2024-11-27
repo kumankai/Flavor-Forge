@@ -22,7 +22,7 @@ namespace Flavor_Forge.Services.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("IngredientName")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("Quantity")
@@ -51,9 +51,6 @@ namespace Flavor_Forge.Services.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT");
-
-                    b.PrimitiveCollection<string>("Ingredients")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Instructions")

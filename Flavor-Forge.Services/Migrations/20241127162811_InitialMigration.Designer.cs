@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flavor_Forge.Services.Migrations
 {
     [DbContext(typeof(Flavor_ForgeDBContext))]
-    [Migration("20241126002903_InitialMigration")]
+    [Migration("20241127162811_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Flavor_Forge.Services.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("IngredientName")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("Quantity")
@@ -54,9 +54,6 @@ namespace Flavor_Forge.Services.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT");
-
-                    b.PrimitiveCollection<string>("Ingredients")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Instructions")

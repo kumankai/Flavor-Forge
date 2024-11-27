@@ -13,12 +13,16 @@ namespace Flavor_Forge.Operations.Controllers
         private readonly IRecipeServices _recipeServices;
         private readonly ICookiesServices _cookiesServices;
         private readonly IImageServices _imageServices;
+        private readonly ITheMealDbServices _theMealDbServices;
+        private readonly IIngredientServices _ingredientServices;
 
-        public RecipeController(IRecipeServices recipeServices, ICookiesServices cookiesServices, IImageServices imageServices)
+        public RecipeController(IRecipeServices recipeServices, ICookiesServices cookiesServices, IImageServices imageServices, ITheMealDbServices theMealDbServices, IIngredientServices ingredientServices)
         {
             _recipeServices = recipeServices;
             _cookiesServices = cookiesServices;
             _imageServices = imageServices;
+            _theMealDbServices = theMealDbServices;
+            _ingredientServices = ingredientServices;
         }
 
         [HttpGet]
@@ -33,20 +37,21 @@ namespace Flavor_Forge.Operations.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Recipe recipe, IFormFile imageFile)
+        public async Task<IActionResult> Add(Recipe recipe, IFormFile imageFile, List<Ingredient> Ingredients)
         {
             try
             {
-                string userIdCookie = _cookiesServices.GetCookie("UserId");
-
+                // Authenticate
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
                 if (userIdCookie == null)
                 {
                     return RedirectToAction("Login", "Auth");
                 }
 
                 int userId = int.Parse(userIdCookie);
-                string username = _cookiesServices.GetCookie("Username");
+                string? username = _cookiesServices.GetCookie("Username");
 
+                // Handle image upload
                 if (imageFile != null)
                 {
                     if (!_imageServices.ValidateImage(imageFile, out string errorMessage))
@@ -59,87 +64,84 @@ namespace Flavor_Forge.Operations.Controllers
                     recipe.ImageUrl = await _imageServices.SaveImageAsync(imageFile, folderPath);
                 }
 
+                // Set recipe properties
                 recipe.UserId = userId;
                 recipe.Author = username;
 
-                if (recipe.Ingredients == null)
-                {
-                    recipe.Ingredients = new List<string>();
-                }
+                // Save the recipe first to get the RecipeId
+                var savedRecipe = _recipeServices.CreateRecipe(recipe);
 
-                _recipeServices.CreateRecipe(recipe);
+                // Save each ingredient
+                if (Ingredients != null && Ingredients.Any())
+                {
+                    foreach (var ingredient in Ingredients)
+                    {
+                        if (ingredient != null && !string.IsNullOrEmpty(ingredient.IngredientName))
+                        {
+                            ingredient.RecipeId = savedRecipe.RecipeId;
+                            _ingredientServices.SaveIngredient(ingredient);
+                        }
+                    }
+                }
 
                 TempData["SuccessMessage"] = "Recipe added successfully!";
                 return RedirectToAction("Profile", "User");
             }
             catch (Exception ex)
             {
+                // Add more detailed error logging
+                Console.WriteLine($"Error details: {ex}");
                 TempData["ErrorMessage"] = "Error adding recipe: " + ex.Message;
                 return RedirectToAction("Add");
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(string mealName)
+        public async Task<IActionResult> Details(string mealName, string mealAuthor)
         {
-            using var httpClient = new HttpClient();
-            string url = $"https://www.themealdb.com/api/json/v1/1/search.php?s={mealName.Trim()}";
-
             try
             {
-                string jsonResponse = await httpClient.GetStringAsync(url);
-                var response = JsonSerializer.Deserialize<Dictionary<string, List<Dictionary<string, string>>>>(jsonResponse);
+                string? currentUsername = _cookiesServices.GetCookie("Username");
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
 
-                if (response != null && response.ContainsKey("meals") && response["meals"] != null)
+                if (userIdCookie == null)
                 {
-                    var mealData = response["meals"][0];
+                    return RedirectToAction("Login", "Auth");
+                }
 
-                    var recipe = new Recipe
-                    {
-                        RecipeName = mealData["strMeal"],
-                        Instructions = mealData["strInstructions"],
-                        ImageUrl = mealData["strMealThumb"],
-                        Ingredients = new List<string>(),
-                        Author = "TheMealDB"
-                    };
+                int userId = int.Parse(userIdCookie);
 
-                    // Process ingredients
-                    for (int i = 1; i <= 20; i++)
-                    {
-                        string ingredientKey = $"strIngredient{i}";
-                        string measureKey = $"strMeasure{i}";
-
-                        if (mealData.ContainsKey(ingredientKey) && mealData.ContainsKey(measureKey))
-                        {
-                            string ingredientName = mealData[ingredientKey];
-                            string measure = mealData[measureKey];
-
-                            if (!string.IsNullOrWhiteSpace(ingredientName) && !string.IsNullOrWhiteSpace(measure))
-                            {
-                                // Combine measure and ingredient name into one string
-                                string fullIngredient = $"{measure} {ingredientName}".Trim();
-                                recipe.Ingredients.Add(fullIngredient);
-                            }
-                        }
-                    }
-
+                // If the recipe author is the current user, get it from our database
+                if (currentUsername == mealAuthor)
+                {
+                    // Get the recipe from database by name and userId
+                    var recipe = _recipeServices.GetRecipe(userId);
+                    // Get ingredients for this recipe
+                    var ingredients = _ingredientServices.GetIngredients(recipe.RecipeId);
+                    ViewBag.Ingredients = ingredients;
+                    return View(recipe);
+                    
+                }
+                // If the recipe author is not the current user, get it from TheMealDB
+                else
+                {
+                    var (recipe, ingredients) = await _theMealDbServices.GetRecipeDetailsAsync(mealName);
+                    ViewBag.Ingredients = ingredients;
                     return View(recipe);
                 }
             }
             catch (Exception ex)
             {
-                // Log the error
+                TempData["ErrorMessage"] = "Error retrieving recipe: " + ex.Message;
                 return RedirectToAction("Error");
             }
-
-            return RedirectToAction("Index");
         }
         [HttpPost]
-        public IActionResult Details(Recipe recipe)
+        public IActionResult Details(Recipe recipe, List<Ingredient> ingredients)
         {
             try
             {
-                string userIdCookie = _cookiesServices.GetCookie("UserId");
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
 
                 // Check if user is logged in
                 if (userIdCookie == null)
@@ -159,15 +161,29 @@ namespace Flavor_Forge.Operations.Controllers
                 // Set the UserId for the recipe
                 recipe.UserId = userId;
 
-                // Save the recipe
-                _recipeServices.CreateRecipe(recipe);
+                // Save the recipe and get the saved recipe with its ID
+                var savedRecipe = _recipeServices.CreateRecipe(recipe);
+
+                // Save ingredients if they exist
+                if (ingredients != null && ingredients.Any())
+                {
+                    foreach (var ingredient in ingredients)
+                    {
+                        if (ingredient != null && !string.IsNullOrEmpty(ingredient.IngredientName))
+                        {
+                            // Set the RecipeId for each ingredient
+                            ingredient.RecipeId = savedRecipe.RecipeId;
+                            _ingredientServices.SaveIngredient(ingredient);
+                        }
+                    }
+                }
 
                 TempData["SuccessMessage"] = "Recipe Saved Successfully!";
                 return RedirectToAction("Details", new { mealName = recipe.RecipeName });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error saving recipe.";
+                TempData["ErrorMessage"] = "Error saving recipe: " + ex.Message;
                 return RedirectToAction("Details", new { mealName = recipe.RecipeName });
             }
         }
@@ -180,38 +196,8 @@ namespace Flavor_Forge.Operations.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string ingredients)
         {
-            var meals = new List<dynamic>();
-            using var httpClient = new HttpClient();
-
-            var ingredientList = ingredients.Split(',').ToList();
-
-            foreach (var ingredient in ingredientList)
-            {
-                string url = $"https://www.themealdb.com/api/json/v1/1/filter.php?i={ingredient.Trim()}";
-
-                try
-                {
-                    string jsonResponse = await httpClient.GetStringAsync(url);
-                    var response = JsonSerializer.Deserialize<Dictionary<string, List<Dictionary<string, string>>>>(jsonResponse);
-
-                    if (response != null && response.ContainsKey("meals") && response["meals"] != null)
-                    {
-                        var mealsForIngredient = response["meals"].Select(meal => new
-                        {
-                            Name = meal["strMeal"],
-                            ImageUrl = meal["strMealThumb"]
-                        });
-
-                        meals.AddRange(mealsForIngredient);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error fetching meals for ingredient '{ingredient}': {ex.Message}");
-                }
-            }
-
-            ViewBag.Meals = meals.DistinctBy(m => m.Name).ToList();
+            var meals = await _theMealDbServices.SearchMealsByIngredientsAsync(ingredients);
+            ViewBag.Meals = meals;
             return View();
         }
 
@@ -220,7 +206,7 @@ namespace Flavor_Forge.Operations.Controllers
         {
             try
             {
-                string userIdCookie = _cookiesServices.GetCookie("UserId");
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
 
                 if (userIdCookie == null)
                 {
@@ -228,16 +214,11 @@ namespace Flavor_Forge.Operations.Controllers
                 }
 
                 int userId = int.Parse(userIdCookie);
-                string username = _cookiesServices.GetCookie("Username");
+                string? username = _cookiesServices.GetCookie("Username");
 
                 var recipe = _recipeServices.GetRecipe(recipeId);
 
-                if (recipe == null || recipe.UserId != userId)
-                {
-                    TempData["ErrorMessage"] = "Recipe not found or you don't have permission to delete it.";
-                    return RedirectToAction("Profile", "User");
-                }
-
+                // If recipe author is user, delete image from wwwroot
                 if (recipe.Author == username && !string.IsNullOrEmpty(recipe.ImageUrl))
                 {
                     string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recipe-images");
@@ -245,8 +226,6 @@ namespace Flavor_Forge.Operations.Controllers
                 }
 
                 _recipeServices.DeleteRecipe(recipeId);
-
-                TempData["SuccessMessage"] = "Recipe deleted successfully.";
                 return RedirectToAction("Profile", "User");
             }
             catch (Exception ex)

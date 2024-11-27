@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Flavor_Forge.Entities;
 using Flavor_Forge.Services.Service;
+using Flavor_Forge.Operations.Services;
 
 namespace Flavor_Forge.Controllers
 {
@@ -8,22 +9,26 @@ namespace Flavor_Forge.Controllers
     {
         private readonly IUserServices _userServices;
         private readonly IRecipeServices _recipeServices;
+        private readonly ICookiesServices _cookieServices;
 
-        public UserController(IUserServices userServices, IRecipeServices recipeServices)
+        public UserController(IUserServices userServices, IRecipeServices recipeServices, ICookiesServices cookiesServices)
         {
             _userServices = userServices;
             _recipeServices = recipeServices;
+            _cookieServices = cookiesServices;
         }
 
         public IActionResult Profile()
         {
+            string? userIdCookie = _cookieServices.GetCookie("UserId");
+
             // Check if user is logged in
-            if (!Request.Cookies.ContainsKey("UserId"))
+            if (userIdCookie == null)
             {
                 return RedirectToAction("Login", "Auth");
             }
 
-            int userId = int.Parse(Request.Cookies["UserId"]);
+            int userId = int.Parse(userIdCookie);
             var user = _userServices.GetUser(userId);
 
             if (user == null)

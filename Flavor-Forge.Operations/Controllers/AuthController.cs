@@ -36,13 +36,13 @@ namespace Flavor_Forge.Operations.Controllers
                 return View(user);
             }
 
-            if (await _authServices.UserExists(user.Username))
+            if (await _authServices.UserExistsAsync(user.Username))
             {
                 TempData["ErrorMessage"] = "Username / Email already exists";
                 return View(user);
             }
 
-            var registeredUser = await _authServices.Register(user);
+            var registeredUser = await _authServices.RegisterAsync(user);
 
             if (registeredUser == null)
             {
@@ -78,7 +78,7 @@ namespace Flavor_Forge.Operations.Controllers
             }
 
             // Authenticate User
-            var validUser = await _authServices.Login(user.Username, user.Password);
+            var validUser = await _authServices.LoginAsync(user.Username, user.Password);
 
             // If user is invalid
             if (validUser == null)

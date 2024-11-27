@@ -9,9 +9,9 @@ namespace Flavor_Forge.Services.Service
 {
     public interface IAuthServices
     {
-        Task<User?> Register(User user);
-        Task<User?> Login(string username, string password);
-        Task<bool> Logout(int userId);
-        Task<bool> UserExists(string username);
+        Task<User?> RegisterAsync(User user);
+        Task<User?> LoginAsync(string username, string password);
+        Task<bool> LogoutAsync(int userId);
+        Task<bool> UserExistsAsync(string username);
     }
 }

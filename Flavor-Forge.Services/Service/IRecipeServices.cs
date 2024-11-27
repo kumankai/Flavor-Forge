@@ -16,5 +16,6 @@ namespace Flavor_Forge.Services.Service
         Recipe UpdateRecipe(Recipe recipe);
         string DeleteRecipe(int recipeId);
         bool CheckSavedRecipe(string recipeName, int userId);
+        List<string> ParseIngredients(Recipe recipe);
     }
 }

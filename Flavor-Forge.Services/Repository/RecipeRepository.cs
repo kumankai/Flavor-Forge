@@ -30,6 +30,7 @@ namespace Flavor_Forge.Services.Repository
         //Recipe CreateRecipe(Recipe recipe);
         public Recipe CreateRecipe(Recipe recipe)
         {
+            // Save recipe
             _flavor_forgeDBContext.Recipes.Add(recipe);
             _flavor_forgeDBContext.SaveChanges();
             return recipe;
@@ -56,6 +57,12 @@ namespace Flavor_Forge.Services.Repository
                 return true;
             }
             return false;
+        }
+
+        // Work on this
+        public List<string> ParseIngredients(Recipe recipe)
+        {
+            return new List<string>();
         }
     }
 }
