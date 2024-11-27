@@ -96,6 +96,7 @@ namespace Flavor_Forge.Operations.Controllers
             {
                 string? currentUsername = _cookiesServices.GetCookie("Username");
                 string? userIdCookie = _cookiesServices.GetCookie("UserId");
+                ViewBag.CurrentUsername = currentUsername;
 
                 if (userIdCookie == null)
                 {
@@ -113,7 +114,7 @@ namespace Flavor_Forge.Operations.Controllers
                     var ingredients = _ingredientServices.GetIngredients(recipe.RecipeId);
                     ViewBag.Ingredients = ingredients;
                     return View(recipe);
-                    
+
                 }
                 // If the recipe author is not the current user, get it from TheMealDB
                 else
@@ -185,6 +186,105 @@ namespace Flavor_Forge.Operations.Controllers
             ViewBag.Meals = meals;
             return View();
         }
+        [HttpGet]
+        public IActionResult Edit(int recipeId)
+        {
+            try
+            {
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
+                if (userIdCookie == null)
+                {
+                    return RedirectToAction("Login", "Auth");
+                }
+
+                int userId = int.Parse(userIdCookie);
+
+                // Get the recipe details by ID
+                var recipe = _recipeServices.GetRecipeById(recipeId);
+
+                // Check if the recipe exists and belongs to the current user
+                if (recipe == null || recipe.UserId != userId)
+                {
+                    TempData["ErrorMessage"] = "You do not have permission to edit this recipe.";
+                    return RedirectToAction("Profile", "User");
+                }
+
+                // Pass the ingredients to the view
+                var ingredients = _ingredientServices.GetIngredients(recipeId);
+                ViewBag.Ingredients = ingredients;
+
+                return View(recipe);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error retrieving recipe for edit: " + ex.Message;
+                return RedirectToAction("Profile", "User");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Recipe recipe, IFormFile? imageFile, List<Ingredient> ingredients)
+        {
+            try
+            {
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
+                if (userIdCookie == null)
+                {
+                    return RedirectToAction("Login", "Auth");
+                }
+
+                int userId = int.Parse(userIdCookie);
+
+                // Validate that the recipe belongs to the user
+                var existingRecipe = _recipeServices.GetRecipeById(recipe.RecipeId);
+                if (existingRecipe == null || existingRecipe.UserId != userId)
+                {
+                    TempData["ErrorMessage"] = "You do not have permission to edit this recipe.";
+                    return RedirectToAction("Profile", "User");
+                }
+
+                // Handle image upload if a new image is provided
+                if (imageFile != null)
+                {
+                    if (!_imageServices.ValidateImage(imageFile, out string errorMessage))
+                    {
+                        TempData["ErrorMessage"] = errorMessage;
+                        return RedirectToAction("Edit", new { recipeId = recipe.RecipeId });
+                    }
+
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recipe-images");
+
+                    // Delete the old image if it exists
+                    if (!string.IsNullOrEmpty(existingRecipe.ImageUrl))
+                    {
+                        _imageServices.DeleteImage(existingRecipe.ImageUrl, folderPath);
+                    }
+
+                    // Save the new image
+                    recipe.ImageUrl = await _imageServices.SaveImageAsync(imageFile, folderPath);
+                }
+                else
+                {
+                    // Retain the existing image URL if no new image is provided
+                    recipe.ImageUrl = existingRecipe.ImageUrl;
+                }
+
+                // Update the recipe
+                _recipeServices.UpdateRecipe(recipe);
+
+                // Update the ingredients
+                _ingredientServices.UpdateIngredients(ingredients, recipe.RecipeId);
+
+                TempData["SuccessMessage"] = "Recipe updated successfully!";
+                return RedirectToAction("Details", new { mealName = recipe.RecipeName, mealAuthor = recipe.Author });
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error updating recipe: " + ex.Message;
+                return RedirectToAction("Edit", new { recipeId = recipe.RecipeId });
+            }
+        }
+
 
         [HttpPost]
         public IActionResult DeleteRecipe(int recipeId)
