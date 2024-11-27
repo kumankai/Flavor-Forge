@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Flavor-Forge.Operations/wwwroot/recipe-images/e2bdf96f-9d26-48f9-ac3a-9071929cf83e.jpg
+/Flavor-Forge.Operations/Data/Flavor_ForgeDB.db-wal
+/Flavor-Forge.Operations/Data/Flavor_ForgeDB.db-shm
