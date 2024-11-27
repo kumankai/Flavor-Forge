@@ -107,8 +107,8 @@ namespace Flavor_Forge.Operations.Controllers
                 // If the recipe author is the current user, get it from our database
                 if (currentUsername == mealAuthor)
                 {
-                    // Get the recipe from database by name and userId
-                    var recipe = _recipeServices.GetRecipe(userId);
+                    // Get the recipe from database by userId and name
+                    var recipe = _recipeServices.GetRecipeByName(mealName, userId);
                     // Get ingredients for this recipe
                     var ingredients = _ingredientServices.GetIngredients(recipe.RecipeId);
                     ViewBag.Ingredients = ingredients;
@@ -201,7 +201,7 @@ namespace Flavor_Forge.Operations.Controllers
                 int userId = int.Parse(userIdCookie);
                 string? username = _cookiesServices.GetCookie("Username");
 
-                var recipe = _recipeServices.GetRecipe(recipeId);
+                var recipe = _recipeServices.GetRecipeById(recipeId);
 
                 // If recipe author is user, delete image from wwwroot
                 if (recipe.Author == username && !string.IsNullOrEmpty(recipe.ImageUrl))
