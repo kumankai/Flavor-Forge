@@ -101,6 +101,7 @@
 
             <!-- Action Buttons -->
             <div class="text-center mt-4">
+                <!-- Existing buttons -->
                 <a class="btn btn-primary btn-lg me-2" asp-controller="Recipe" asp-action="Search">
                     <i class="fas fa-arrow-left me-2"></i>
                     Back to Search
@@ -109,6 +110,14 @@
                     <i class="fas fa-print me-2"></i>
                     Print Recipe
                 </a>
+                @if (Model.Author == ViewBag.CurrentUsername) // Check if the logged-in user is the author
+                {
+                    <a class="btn btn-warning btn-lg" asp-controller="Recipe" asp-action="Edit" asp-route-recipeId="@Model.RecipeId">
+                        <i class="fas fa-edit me-2"></i>
+                        Update Recipe
+                    </a>
+                }
+            </div>
             </div>
         </div>
     </div>
