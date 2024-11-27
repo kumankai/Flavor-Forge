@@ -11,7 +11,8 @@ namespace Flavor_Forge.Services.Service
     {
         // Get recipes by user
         List<Recipe> GetRecipesByUserId(int userId);
-        Recipe GetRecipe(int recipeId);
+        Recipe GetRecipeById(int recipeId);
+        Recipe GetRecipeByName(string recipeName, int userId);
         Recipe CreateRecipe(Recipe recipe);
         Recipe UpdateRecipe(Recipe recipe);
         string DeleteRecipe(int recipeId);

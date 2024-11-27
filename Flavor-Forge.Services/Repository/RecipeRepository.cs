@@ -22,10 +22,15 @@ namespace Flavor_Forge.Services.Repository
                 .Where(r => r.UserId == userId)
                 .ToList();
         }
-        //Recipe GetRecipe(int recipeId);
-        public Recipe GetRecipe(int recipeId)
+        //Recipe GetRecipeById(recipeId);
+        public Recipe GetRecipeById(int recipeId)
         {
             return _flavor_forgeDBContext.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+        }
+        //Recipe GetRecipeByName(string recipeName, int userId);
+        public Recipe GetRecipeByName(string recipeName, int userId)
+        {
+            return _flavor_forgeDBContext.Recipes.FirstOrDefault(r => r.UserId == userId && r.RecipeName == recipeName);
         }
         //Recipe CreateRecipe(Recipe recipe);
         public Recipe CreateRecipe(Recipe recipe)
@@ -45,7 +50,7 @@ namespace Flavor_Forge.Services.Repository
         //Recipe DeleteRecipe(int recipeId);
         public string DeleteRecipe(int recipeId)
         {
-            _flavor_forgeDBContext.Recipes.Remove(GetRecipe(recipeId));
+            _flavor_forgeDBContext.Recipes.Remove(GetRecipeById(recipeId));
             _flavor_forgeDBContext.SaveChanges();
             return "Recipe Deleted";
         }
