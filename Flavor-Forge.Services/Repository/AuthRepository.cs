@@ -20,7 +20,11 @@ namespace Flavor_Forge.Services.Repository
             {
                 return null;
             }
-
+            
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Password));
+            user.Password = Convert.ToBase64String(bytes);
+            
             _flavor_forgeDBContext.Users.Add(user);
             _flavor_forgeDBContext.SaveChanges();
             return user;
@@ -29,11 +33,15 @@ namespace Flavor_Forge.Services.Repository
         public async Task<User?> LoginAsync(string username, string password)
         {
             var user = await _flavor_forgeDBContext.Users
-                .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower()
-                                     && u.Password == password);
+                .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+
+            if (await CheckPassword(password, user.UserId))
+            {
+                return user;
+            }
 
             // Returns user or null
-            return user;
+            return null;
         }
 
         public async Task<bool> LogoutAsync(int userId)
@@ -59,6 +67,23 @@ namespace Flavor_Forge.Services.Repository
             }
 
             return true;
+        }
+        public async Task<bool> CheckPassword(string password, int userId) 
+        {
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            var hashed_password = Convert.ToBase64String(bytes);
+          
+            // Rettrieve user pass from db 
+            var user = await _flavor_forgeDBContext.Users
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+            // Compare
+
+            if (user.Password == hashed_password)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
