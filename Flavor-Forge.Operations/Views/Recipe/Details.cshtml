@@ -27,10 +27,18 @@
                         </span>
                     }
                 </div>
-                <a class="btn btn-success" href="#" id="saveRecipeBtn">
-                    <i class="fas fa-bookmark me-2"></i>
-                    Save Recipe
-                </a>
+                <form asp-action="Details" asp-controller="Recipe" method="post">
+                    @Html.HiddenFor(m => m.RecipeName)
+                    @Html.HiddenFor(m => m.ImageUrl)
+                    @Html.HiddenFor(m => m.Author)
+                    @Html.HiddenFor(m => m.Instructions)
+                    @Html.HiddenFor(m => m.Ingredients)
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-bookmark me-2"></i>
+                        Save Recipe
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -186,3 +194,41 @@
         margin-bottom: 2rem;
     }
 </style>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+        <div class="toast align-items-center text-white bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i>
+                    @TempData["SuccessMessage"]
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+        <div class="toast align-items-center text-white bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    @TempData["ErrorMessage"]
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Auto-hide the toast after 3 seconds
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.toast').fadeOut('slow');
+            }, 3000);
+        });
+    </script>
+}

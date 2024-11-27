@@ -8,13 +8,11 @@ namespace Flavor_Forge.Controllers
     {
         private readonly IUserServices _userServices;
         private readonly IRecipeServices _recipeServices;
-        private readonly IIngredientServices _ingredientServices;
 
-        public UserController(IUserServices userServices, IRecipeServices recipeServices, IIngredientServices ingredientServices)
+        public UserController(IUserServices userServices, IRecipeServices recipeServices)
         {
             _userServices = userServices;
             _recipeServices = recipeServices;
-            _ingredientServices = ingredientServices;
         }
 
         public IActionResult Profile()

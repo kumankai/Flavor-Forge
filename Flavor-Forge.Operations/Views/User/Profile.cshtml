@@ -8,7 +8,7 @@
     <!-- Profile Header -->
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h2 class="mb-0">@username</h2>
+            <h2 class="mb-0">@username's Profile</h2>
         </div>
     </div>
 
@@ -34,11 +34,18 @@
                                         <small>By @recipe.Author</small>
                                     </p>
                                 </div>
-                                <div class="card-footer bg-white border-top-0">
+                                <div class="card-footer bg-white border-top-0 d-flex gap-2">
                                     <a href="@Url.Action("Details", "Recipe", new { id = recipe.RecipeId })"
-                                       class="btn btn-outline-primary w-100">
+                                       class="btn btn-outline-primary flex-grow-1">
                                         View Full Recipe
                                     </a>
+                                    <form asp-controller="Recipe" asp-action="DeleteRecipe" method="post"
+                                          onsubmit="return confirm('Are you sure you want to unsave this recipe?');">
+                                        <input type="hidden" name="recipeId" value="@recipe.RecipeId" />
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
