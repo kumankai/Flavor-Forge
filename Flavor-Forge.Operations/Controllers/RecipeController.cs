@@ -96,6 +96,7 @@ namespace Flavor_Forge.Operations.Controllers
             {
                 string? currentUsername = _cookiesServices.GetCookie("Username");
                 string? userIdCookie = _cookiesServices.GetCookie("UserId");
+                ViewBag.CurrentUsername = currentUsername;
 
                 if (userIdCookie == null)
                 {
@@ -103,35 +104,25 @@ namespace Flavor_Forge.Operations.Controllers
                 }
 
                 int userId = int.Parse(userIdCookie);
-                Recipe recipe;
 
                 // If the recipe author is the current user, get it from our database
                 if (currentUsername == mealAuthor)
                 {
                     // Get the recipe from database by userId and name
-                    recipe = _recipeServices.GetRecipeByName(mealName, userId);
+                    var recipe = _recipeServices.GetRecipeByName(mealName, userId);
+                    // Get ingredients for this recipe
+                    var ingredients = _ingredientServices.GetIngredients(recipe.RecipeId);
+                    ViewBag.Ingredients = ingredients;
+                    return View(recipe);
+
                 }
+                // If the recipe author is not the current user, get it from TheMealDB
                 else
                 {
-                    // If the recipe author is not the current user, get it from TheMealDB
-                    (recipe, _) = await _theMealDbServices.GetRecipeDetailsAsync(mealName);
+                    var (recipe, ingredients) = await _theMealDbServices.GetRecipeDetailsAsync(mealName);
+                    ViewBag.Ingredients = ingredients;
+                    return View(recipe);
                 }
-
-                // Check if the recipe was found
-                if (recipe == null)
-                {
-                    TempData["ErrorMessage"] = "Recipe not found.";
-                    return RedirectToAction("Search");
-                }
-
-                // Get ingredients for this recipe
-                var ingredients = _ingredientServices.GetIngredients(recipe.RecipeId);
-                ViewBag.Ingredients = ingredients;
-
-                // Set the current username in ViewBag for comparison in the view
-                ViewBag.CurrentUsername = currentUsername;
-
-                return View(recipe);
             }
             catch (Exception ex)
             {
