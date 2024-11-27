@@ -248,6 +248,7 @@ namespace Flavor_Forge.Operations.Controllers
                 }
 
                 int userId = int.Parse(Request.Cookies["UserId"]);
+                string username = Request.Cookies["Username"];
 
                 // Get the recipe
                 var recipe = _recipeServices.GetRecipe(recipeId);
@@ -259,15 +260,42 @@ namespace Flavor_Forge.Operations.Controllers
                     return RedirectToAction("Profile", "User");
                 }
 
+                // If the user is the author (not TheMealDB), delete the image file
+                if (recipe.Author == username && !string.IsNullOrEmpty(recipe.ImageUrl))
+                {
+                    try
+                    {
+                        // Get the file path from the ImageUrl
+                        string fileName = Path.GetFileName(recipe.ImageUrl);
+                        string filePath = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot",
+                            "recipe-images",
+                            fileName
+                        );
+
+                        // Check if file exists before attempting to delete
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the error but continue with recipe deletion
+                        Console.WriteLine($"Error deleting image file: {ex.Message}");
+                    }
+                }
+
                 // Delete the recipe
                 _recipeServices.DeleteRecipe(recipeId);
 
                 TempData["SuccessMessage"] = "Recipe unsaved successfully.";
                 return RedirectToAction("Profile", "User");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error unsaving recipe.";
+                TempData["ErrorMessage"] = "Error unsaving recipe: " + ex.Message;
                 return RedirectToAction("Profile", "User");
             }
         }

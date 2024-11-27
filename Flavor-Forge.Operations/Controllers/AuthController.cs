@@ -48,6 +48,7 @@ namespace Flavor_Forge.Operations.Controllers
 
             var options = new CookieOptions { HttpOnly = true, Secure = true };
             Response.Cookies.Append("UserId", registeredUser.UserId.ToString(), options);
+            Response.Cookies.Append("Username", registeredUser.Username, options);
 
             return RedirectToAction("Index", "Home");
         }
@@ -86,6 +87,7 @@ namespace Flavor_Forge.Operations.Controllers
 
             var options = new CookieOptions { HttpOnly = true, Secure = true };
             Response.Cookies.Append("UserId", validUser.UserId.ToString(), options);
+            Response.Cookies.Append("Username", validUser.Username, options);
 
             return RedirectToAction("Index", "Home");
         }
