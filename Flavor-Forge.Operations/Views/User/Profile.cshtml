@@ -35,7 +35,7 @@
                                     </p>
                                 </div>
                                 <div class="card-footer bg-white border-top-0 d-flex gap-2">
-                                    <a href="@Url.Action("Details", "Recipe", new { mealName = recipe.RecipeName })"
+                                    <a href="@Url.Action("Details", "Recipe", new { mealName = recipe.RecipeName, mealRecipe = recipe.Author })"
                                        class="btn btn-outline-primary flex-grow-1">
                                         View Full Recipe
                                     </a>

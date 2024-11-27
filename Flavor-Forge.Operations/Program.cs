@@ -18,6 +18,7 @@ builder.Services.AddScoped<IIngredientServices, IngredientRepository>();
 builder.Services.AddScoped<IAuthServices, AuthRepository>();
 builder.Services.AddScoped<ICookiesServices, CookiesRepository>();
 builder.Services.AddScoped<IImageServices, ImageRepository>();
+builder.Services.AddHttpClient<ITheMealDbServices, TheMealDbRepository>();
 
 // Register DB
 builder.Services.AddDbContext<Flavor_ForgeDBContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("SQLiteConn")));

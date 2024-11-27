@@ -32,7 +32,6 @@ namespace Flavor_Forge.Services.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     RecipeName = table.Column<string>(type: "TEXT", nullable: true),
                     Instructions = table.Column<string>(type: "TEXT", nullable: true),
-                    Ingredients = table.Column<string>(type: "TEXT", nullable: true),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
                     Author = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -54,7 +53,7 @@ namespace Flavor_Forge.Services.Migrations
                 {
                     IngredientId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    IngredientName = table.Column<string>(type: "TEXT", nullable: true),
                     Quantity = table.Column<decimal>(type: "TEXT", nullable: true),
                     Unit = table.Column<string>(type: "TEXT", nullable: true),
                     RecipeId = table.Column<int>(type: "INTEGER", nullable: false)

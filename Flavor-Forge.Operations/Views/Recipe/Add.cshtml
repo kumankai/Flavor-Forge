@@ -24,7 +24,7 @@
             <div class="form-group ingredient-row">
                 <div class="row align-items-center">
                     <div class="col-md-5">
-                        <input type="text" name="Ingredients[0].Name"
+                        <input type="text" name="Ingredients[0].IngredientName"
                                placeholder="Enter ingredient" class="form-control" required />
                     </div>
                     <div class="col-md-2">
@@ -94,35 +94,36 @@
 
         // HTML template for new ingredient row
         newIngredient.innerHTML = `
-                    <div class="row align-items-center">
-                        <div class="col-md-5">
-                            <input type="text" name="Ingredients[${ingredientIndex}].Name"
-                                   placeholder="Enter ingredient" class="form-control" required />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" name="Ingredients[${ingredientIndex}].Quantity"
-                                   placeholder="Quantity" class="form-control" step="0.1" required />
-                        </div>
-                        <div class="col-md-3">
-                            <select name="Ingredients[${ingredientIndex}].Unit" class="form-control" required>
-                                <option value="">Select Unit</option>
-                                <option value="cup">Cup(s)</option>
-                                <option value="tbsp">Tablespoon(s)</option>
-                                <option value="tsp">Teaspoon(s)</option>
-                                <option value="oz">Ounce(s)</option>
-                                <option value="lb">Pound(s)</option>
-                                <option value="g">Gram(s)</option>
-                                <option value="ml">Milliliter(s)</option>
-                                <option value="piece">Piece(s)</option>
-                                <option value="pinch">Pinch</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-danger btn-sm delete-ingredient">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </div>`;
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" name="Ingredients[${ingredientIndex}].IngredientName"
+                                       placeholder="Enter ingredient" class="form-control" required />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" name="Ingredients[${ingredientIndex}].Quantity"
+                                       placeholder="Quantity" class="form-control" step="0.1" required />
+                            </div>
+                            <div class="col-md-3">
+                                <select name="Ingredients[${ingredientIndex}].Unit" class="form-control" required>
+                                    <option value="">Select Unit</option>
+                                    <option value="cup">Cup(s)</option>
+                                    <option value="tbsp">Tablespoon(s)</option>
+                                    <option value="tsp">Teaspoon(s)</option>
+                                    <option value="oz">Ounce(s)</option>
+                                    <option value="lb">Pound(s)</option>
+                                    <option value="g">Gram(s)</option>
+                                    <option value="ml">Milliliter(s)</option>
+                                    <option value="piece">Piece(s)</option>
+                                    <option value="pinch">Pinch</option>
+                                    <option value="whole">Whole</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger btn-sm delete-ingredient">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>`;
 
         // Add the new row to the container
         container.appendChild(newIngredient);

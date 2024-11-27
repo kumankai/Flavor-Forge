@@ -13,10 +13,10 @@ namespace Flavor_Forge.Services.Repository
             _flavor_forgeDBContext = context;
         }
 
-        public async Task<User?> Register(User user)
+        public async Task<User?> RegisterAsync(User user)
         {
 
-            if (await UserExists(user.Username))
+            if (await UserExistsAsync(user.Username))
             {
                 return null;
             }
@@ -26,7 +26,7 @@ namespace Flavor_Forge.Services.Repository
             return user;
         }
 
-        public async Task<User?> Login(string username, string password)
+        public async Task<User?> LoginAsync(string username, string password)
         {
             var user = await _flavor_forgeDBContext.Users
                 .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower()
@@ -36,7 +36,7 @@ namespace Flavor_Forge.Services.Repository
             return user;
         }
 
-        public async Task<bool> Logout(int userId)
+        public async Task<bool> LogoutAsync(int userId)
         {
             var user = await _flavor_forgeDBContext.Users.FindAsync(userId);
 
@@ -49,7 +49,7 @@ namespace Flavor_Forge.Services.Repository
             return true;
         }
 
-        public async Task<bool> UserExists(string username)
+        public async Task<bool> UserExistsAsync(string username)
         {
             var user = await _flavor_forgeDBContext.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower());
 

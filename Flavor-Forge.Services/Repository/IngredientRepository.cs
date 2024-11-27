@@ -22,5 +22,12 @@ namespace Flavor_Forge.Services.Repository
                 .Where(i => i.RecipeId == recipeId)
                 .ToList();
         }
+
+        public Ingredient SaveIngredient(Ingredient ingredient)
+        {
+            _flavor_forgeDBContext.Ingredients.Add(ingredient);
+            _flavor_forgeDBContext.SaveChanges();
+            return ingredient;
+        }
     }
 }
