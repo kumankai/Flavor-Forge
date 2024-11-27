@@ -101,24 +101,38 @@ namespace Flavor_Forge.Operations.Controllers
         {
             try
             {
-                if (_cookiesServices.GetCookie("Username") != mealAuthor)
+                string? currentUsername = _cookiesServices.GetCookie("Username");
+                string? userIdCookie = _cookiesServices.GetCookie("UserId");
+
+                if (userIdCookie == null)
                 {
-                    var (recipe, ingredients) = await _theMealDbServices.GetRecipeDetailsAsync(mealName);
-                    if (recipe != null)
-                    {
-                        ViewBag.Ingredients = ingredients; // Pass ingredients to the view separately
-                        return View(recipe); // Pass recipe as the main model
-                    }
+                    return RedirectToAction("Login", "Auth");
                 }
+
+                int userId = int.Parse(userIdCookie);
+
+                // If the recipe author is the current user, get it from our database
+                if (currentUsername == mealAuthor)
+                {
+                    // Get the recipe from database by name and userId
+                    var recipe = _recipeServices.GetRecipe(userId);
+                    // Get ingredients for this recipe
+                    var ingredients = _ingredientServices.GetIngredients(recipe.RecipeId);
+                    ViewBag.Ingredients = ingredients;
+                    return View(recipe);
+                    
+                }
+                // If the recipe author is not the current user, get it from TheMealDB
                 else
                 {
-
+                    var (recipe, ingredients) = await _theMealDbServices.GetRecipeDetailsAsync(mealName);
+                    ViewBag.Ingredients = ingredients;
+                    return View(recipe);
                 }
-
-                return RedirectToAction("Error");
             }
-            catch
+            catch (Exception ex)
             {
+                TempData["ErrorMessage"] = "Error retrieving recipe: " + ex.Message;
                 return RedirectToAction("Error");
             }
         }
