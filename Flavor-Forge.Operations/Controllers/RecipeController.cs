@@ -98,11 +98,6 @@ namespace Flavor_Forge.Operations.Controllers
                 string? userIdCookie = _cookiesServices.GetCookie("UserId");
                 ViewBag.CurrentUsername = currentUsername;
 
-                //if (userIdCookie == null)
-                //{
-                //    return RedirectToAction("Login", "Auth");
-                //}
-
                 // If the recipe author is the current user, get it from our database
                 if (currentUsername != null && currentUsername == mealAuthor)
                 {
@@ -269,7 +264,7 @@ namespace Flavor_Forge.Operations.Controllers
                 }
 
                 // Update the recipe
-                _recipeServices.UpdateRecipe(recipe);
+                await _recipeServices.UpdateRecipeAsync(recipe);
 
                 // Update the ingredients
                 _ingredientServices.UpdateIngredients(ingredients, recipe.RecipeId);

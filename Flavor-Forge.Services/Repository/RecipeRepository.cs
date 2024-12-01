@@ -41,7 +41,7 @@ namespace Flavor_Forge.Services.Repository
             return recipe;
         }
         //Recipe UpdateRecipe(Recipe recipe);
-        public Recipe UpdateRecipe(Recipe recipe)
+        public async Task<Recipe> UpdateRecipeAsync(Recipe recipe)
         {
             _flavor_forgeDBContext.Recipes.Update(recipe);
             _flavor_forgeDBContext.SaveChanges();

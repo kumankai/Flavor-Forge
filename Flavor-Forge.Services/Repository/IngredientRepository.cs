@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Flavor_Forge.Services.Repository
 {
@@ -49,50 +50,31 @@ namespace Flavor_Forge.Services.Repository
             _flavor_forgeDBContext.SaveChanges();
         }
 
-        public void UpdateIngredients(List<Ingredient> ingredients, int recipeId)
+        public async Task UpdateIngredients(List<Ingredient> ingredients, int recipeId)
         {
             if (ingredients == null || !ingredients.Any())
             {
                 throw new ArgumentException("Ingredients list cannot be null or empty.");
             }
 
-            // Fetch existing ingredients for the recipe
+            // Fetch all existing ingredients for the recipe
             var existingIngredients = _flavor_forgeDBContext.Ingredients
                 .Where(i => i.RecipeId == recipeId)
                 .ToList();
 
-            // Remove ingredients that are no longer in the updated list
-            foreach (var existingIngredient in existingIngredients)
-            {
-                if (!ingredients.Any(i => i.IngredientId == existingIngredient.IngredientId))
-                {
-                    _flavor_forgeDBContext.Ingredients.Remove(existingIngredient);
-                }
-            }
+            // Remove all existing ingredients for the recipe
+            _flavor_forgeDBContext.Ingredients.RemoveRange(existingIngredients);
 
-            // Update or add ingredients
+            // Add the new ingredients
             foreach (var ingredient in ingredients)
             {
-                var existingIngredient = existingIngredients
-                    .FirstOrDefault(i => i.IngredientId == ingredient.IngredientId);
-
-                if (existingIngredient != null)
-                {
-                    // Update existing ingredient
-                    existingIngredient.IngredientName = ingredient.IngredientName;
-                    existingIngredient.Quantity = ingredient.Quantity;
-                    existingIngredient.Unit = ingredient.Unit;
-                }
-                else
-                {
-                    // Add new ingredient
-                    ingredient.RecipeId = recipeId;
-                    _flavor_forgeDBContext.Ingredients.Add(ingredient);
-                }
+                ingredient.RecipeId = recipeId; // Ensure the RecipeId is set for each ingredient
+                _flavor_forgeDBContext.Ingredients.Add(ingredient);
             }
 
             // Save changes to the database
-            _flavor_forgeDBContext.SaveChanges();
+            await _flavor_forgeDBContext.SaveChangesAsync();
         }
+
     }
 }
