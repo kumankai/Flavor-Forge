@@ -101,5 +101,26 @@ namespace Flavor_Forge.Controllers
             return RedirectToAction("Settings");
         }
 
+        [HttpPost]
+        public IActionResult DeleteUser(int userId)
+        {
+            // Validate User
+            var user = _userServices.GetUser(userId);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Delete User
+            _userServices.DeleteUser(userId);
+
+            // Remove Authentication Cookies
+            _cookieServices.DeleteCookie("UserId");
+            _cookieServices.DeleteCookie("Username");
+
+            // Redirect to Home Page or Login
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
