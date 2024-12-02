@@ -44,6 +44,32 @@ namespace Flavor_Forge.Controllers
             return View(recipes);
         }
 
+        public IActionResult Settings()
+        {
+            string? userIdCookie = _cookieServices.GetCookie("UserId");
+
+            // Check if user is logged in
+            if (userIdCookie == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            int userId = int.Parse(userIdCookie);
+            var user = _userServices.GetUser(userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Get user's recipes
+            var recipes = _recipeServices.GetRecipesByUserId(userId);
+
+            ViewBag.Username = user.Username;
+            ViewBag.UserId = user.UserId;
+            return View(recipes);
+        }
+
         [HttpPost]
         public IActionResult UpdateUsername(int userId, string newUsername)
         {
@@ -55,7 +81,7 @@ namespace Flavor_Forge.Controllers
             user.Username = newUsername;
             _userServices.UpdateUser(user);
 
-            return RedirectToAction("Profile");
+            return RedirectToAction("Settings");
         }
 
         [HttpPost]
@@ -72,7 +98,7 @@ namespace Flavor_Forge.Controllers
             user.Password = Convert.ToBase64String(bytes);
             _userServices.UpdateUser(user);
 
-            return RedirectToAction("Profile");
+            return RedirectToAction("Settings");
         }
 
     }

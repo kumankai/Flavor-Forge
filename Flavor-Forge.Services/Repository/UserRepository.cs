@@ -41,12 +41,6 @@ namespace Flavor_Forge.Services.Repository
             return user;
         }
 
-        //public void UpdateUser(User user)
-        //{
-        //    _flavor_forgeDBContext.Users.Update(user);
-        //    _flavor_forgeDBContext.SaveChanges();
-        //}
-
         public string DeleteUser(int userId)
         {
             _flavor_forgeDBContext.Users.Remove(GetUser(userId));
