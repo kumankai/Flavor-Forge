@@ -1,5 +1,6 @@
 ﻿using Flavor_Forge.Entities;
 using Flavor_Forge.Services.Service;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,12 @@ namespace Flavor_Forge.Services.Repository
             _flavor_forgeDBContext.SaveChanges();
             return user;
         }
+
+        //public void UpdateUser(User user)
+        //{
+        //    _flavor_forgeDBContext.Users.Update(user);
+        //    _flavor_forgeDBContext.SaveChanges();
+        //}
 
         public string DeleteUser(int userId)
         {

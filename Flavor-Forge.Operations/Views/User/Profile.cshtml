@@ -12,6 +12,27 @@
         </div>
     </div>
 
+    <!-- Username Change Form -->
+    <form asp-controller="User" asp-action="UpdateUsername" method="post">
+        <input type="hidden" name="userId" value="@ViewBag.UserId" />
+        <div class="mb-3">
+            <label for="newUsername" class="form-label">New Username</label>
+            <input type="text" id="newUsername" name="newUsername" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Change Username</button>
+    </form>
+
+    <!-- Password Change Form -->
+    <form asp-controller="User" asp-action="UpdatePassword" method="post">
+        <input type="hidden" name="userId" value="@ViewBag.UserId" />
+        <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" id="newPassword" name="newPassword" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Change Password</button>
+    </form>
+
+
     <!-- Saved Recipes Section -->
     <div class="row">
         <div class="col-12">
