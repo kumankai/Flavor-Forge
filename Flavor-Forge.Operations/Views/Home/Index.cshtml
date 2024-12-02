@@ -1,67 +1,80 @@
 ﻿@{
     ViewData["Title"] = "Recipe Finder";
 }
+<body class="scroll-bg">
+	<div class="container">
+		<!-- Hero Section -->
+		<div class="hero-section text-center py-5">
+			<h1 class="display-4 mb-4">Find Delicious Recipes</h1>
+			<p class="lead mb-5">Enter ingredients you have, and we'll show you what you can cook!</p>
 
-<div class="container">
-    <!-- Hero Section -->
-    <div class="hero-section text-center py-5">
-        <h1 class="display-4 mb-4">Find Delicious Recipes</h1>
-        <p class="lead mb-5">Enter ingredients you have, and we'll show you what you can cook!</p>
+			<!-- Find Recipe Button -->
+			<div class="row justify-content-center mb-5">
+				<div class="col-md-8">
+					@Html.ActionLink("Find Recipes", "Search", "Recipe", null,
+											new { @class = "btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm find-recipes-btn" })
+				</div>
+			</div>
 
-        <!-- Find Recipe Button -->
-        <div class="row justify-content-center mb-5">
-            <div class="col-md-8">
-                @Html.ActionLink("Find Recipes", "Search", "Recipe", null,
-                         new { @class = "btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm find-recipes-btn" })
-            </div>
-        </div>
+			<!-- Popular Categories -->
+			<div class="categories-section mb-5">
+				<h2 class="h4 mb-4">What you can find</h2>
+				<div class="row justify-content-center g-4">
+					<div class="col-6 col-md-3">
+						<div class="card h-100 border-0 shadow-sm">
+							<div class="card-body">
+								<i class="fas fa-clock mb-3 text-primary"></i>
+								<h5 class="card-title">Quick & Easy</h5>
+								<p class="card-text small">Ready in 30 minutes</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-3">
+						<div class="card h-100 border-0 shadow-sm">
+							<div class="card-body">
+								<i class="fas fa-leaf mb-3 text-success"></i>
+								<h5 class="card-title">Vegetarian</h5>
+								<p class="card-text small">Plant-based dishes</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-3">
+						<div class="card h-100 border-0 shadow-sm">
+							<div class="card-body">
+								<i class="fas fa-fire mb-3 text-danger"></i>
+								<h5 class="card-title">Trending</h5>
+								<p class="card-text small">Most popular now</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-3">
+						<div class="card h-100 border-0 shadow-sm">
+							<div class="card-body">
+								<i class="fas fa-heart mb-3 text-danger"></i>
+								<h5 class="card-title">Healthy</h5>
+								<p class="card-text small">Nutritious meals</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
 
-        <!-- Popular Categories -->
-        <div class="categories-section mb-5">
-            <h2 class="h4 mb-4">What you can find</h2>
-            <div class="row justify-content-center g-4">
-                <div class="col-6 col-md-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <i class="fas fa-clock mb-3 text-primary"></i>
-                            <h5 class="card-title">Quick & Easy</h5>
-                            <p class="card-text small">Ready in 30 minutes</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <i class="fas fa-leaf mb-3 text-success"></i>
-                            <h5 class="card-title">Vegetarian</h5>
-                            <p class="card-text small">Plant-based dishes</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <i class="fas fa-fire mb-3 text-danger"></i>
-                            <h5 class="card-title">Trending</h5>
-                            <p class="card-text small">Most popular now</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <i class="fas fa-heart mb-3 text-danger"></i>
-                            <h5 class="card-title">Healthy</h5>
-                            <p class="card-text small">Nutritious meals</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <style>
+.scroll-bg {
+		height: 100%;
+		width: 100%;
+		position: fixed;
+		padding-bottom: 330px;
+		background-color: #291b13;
+		background-image: url("https://andreivictor.ro/codepen/scroll-bg-animation-pinterest/bg_pasta_grid-3f880df3.jpg");
+		background-size: cover;
+		-webkit-animation: scrollBg 35s linear forwards;
+		animation: scrollBg 35s linear forwards;
+	}
     .hero-section {
         background-color: #f8f9fa;
         border-radius: 15px;
