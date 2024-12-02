@@ -1,13 +1,20 @@
 ﻿@model Flavor_Forge.Entities.User
 @{
+    // Sets the title of the page
     ViewBag.Title = "Register";
 }
+
+// Link to an external Google Font for custom styling
 <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Serif' rel='stylesheet'>
+
 <div class="login-root">
+    <!-- Main container for the registration page -->
     <div class="box-root flex-flex flex-direction--column"
          style="min-height: 100vh; flex-grow: 1">
+        <!-- Background design for the registration page -->
         <div class="loginbackground box-background--white padding-top--64">
             <div class="loginbackground-gridContainer">
+                <!-- Decorative elements for background design -->
                 <div class="box-root flex-flex"
                      style="grid-area: top / start / 8 / end">
                     <div class="box-root"
@@ -37,6 +44,7 @@
                     <div class="box-root box-background--gray100 animationLeftRight tans3s"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Additional background elements with animations -->
                 <div class="box-root flex-flex"
                      style="grid-area: 2 / 15 / auto / end">
                     <div class="box-root box-background--cyan200 animationRightLeft tans4s"
@@ -59,26 +67,31 @@
                 </div>
             </div>
         </div>
+        <!-- Container for the registration form -->
         <div class="box-root padding-top--24 flex-flex flex-direction--column"
              style="flex-grow: 1; z-index: 9">
+            <!-- Header for the registration page -->
             <div class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center">
                 <h1>
                     Sign Up
                 </h1>
             </div>
 
-            <!-- Login form -->
+            <!-- Registration form -->
             <div class="formbg-outer">
                 <div class="formbg">
-                    <!-- Login form -->
                     @using (Html.BeginForm("Register", "Auth"))
                     {
                         @Html.AntiForgeryToken()
+                // CSRF protection
 
+                        <!-- Hidden CSRF token -->
                         <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
-                        <div class="formbg-inner padding-horizontal--48">
-                            <span class="padding-bottom--15">Sign in to your account</span>
 
+                        <div class="formbg-inner padding-horizontal--48">
+                            <span class="padding-bottom--15">Sign up for an account</span>
+
+                            <!-- Display error message if registration fails -->
                             @if (TempData["ErrorMessage"] != null)
                             {
                                 <div class="alert alert-danger mb-3">
@@ -87,16 +100,19 @@
                             }
 
                             <form id="stripe-login">
+                                <!-- Username input field -->
                                 <div class="field padding-bottom--24">
                                     @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
                                     @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
                                     @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                                 </div>
+                                <!-- Password input field -->
                                 <div class="field padding-bottom--24">
                                     @Html.LabelFor(m => m.Password, "Password", new { @for = "password" })
                                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
                                     @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                                 </div>
+                                <!-- Confirm Password field -->
                                 <div class="form-group required">
                                     <label class="d-flex flex-row align-items-center" for="confirmPassword">
                                         Confirm Password
@@ -104,21 +120,23 @@
                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required="required" />
                                     <span id="passwordError" class="text-danger"></span>
                                 </div>
+                                <!-- Remember me checkbox -->
                                 <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
                                     <label for="checkbox">
                                         <input type="checkbox" name="checkbox" /> Remember me
                                     </label>
                                 </div>
+                                <!-- Submit button -->
                                 <div class="field padding-bottom--24">
                                     <button type="submit" name="submit">Sign Up</button>
                                 </div>
                             </form>
                         </div>
                     }
-
                 </div>
+                <!-- Footer links -->
                 <div class="footer-link padding-top--24">
-                    <span>Don't have an account? <a href="@Url.Action("Login","Auth")"> Login</a></span>
+                    <span>Already have an account? <a href="@Url.Action("Login", "Auth")"> Login</a></span>
                     <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">
                         <span><a href="#">Contact</a></span>
                         <span><a href="#">Privacy & terms</a></span>
@@ -128,24 +146,27 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script>
         $(document).ready(function () {
+            // Handle form submission
             $('#submitForm').on('submit', function (e) {
                 var password = $('#password').val();
                 var confirmPassword = $('#confirmPassword').val();
 
+                // Check if passwords match
                 if (password !== confirmPassword) {
                     e.preventDefault();
                     $('#passwordError').text('Passwords do not match');
                     return false;
                 }
 
-                $('#passwordError').text('');
+                $('#passwordError').text(''); // Clear error if passwords match
                 return true;
             });
 
-            // Real-time validation
+            // Real-time password confirmation validation
             $('#confirmPassword').on('input', function () {
                 var password = $('#password').val();
                 var confirmPassword = $(this).val();
@@ -159,6 +180,7 @@
         });
     </script>
 }
+
 
 <style>
     a {

@@ -1,13 +1,20 @@
 ﻿@model Flavor_Forge.Entities.User
 @{
+    // Sets the title of the page
     ViewBag.Title = "Login";
 }
+
+// Link to an external Google Font for custom styling
 <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Serif' rel='stylesheet'>
+
 <div class="login-root">
+    <!-- Main container for the login page -->
     <div class="box-root flex-flex flex-direction--column"
          style="min-height: 100vh; flex-grow: 1">
+        <!-- Background design for the login page -->
         <div class="loginbackground box-background--white padding-top--64">
             <div class="loginbackground-gridContainer">
+                <!-- Decorative grid containers for background design -->
                 <div class="box-root flex-flex"
                      style="grid-area: top / start / 8 / end">
                     <div class="box-root"
@@ -19,6 +26,7 @@
                   flex-grow: 1;
                 "></div>
                 </div>
+                <!-- Additional decorative elements with animations -->
                 <div class="box-root flex-flex" style="grid-area: 4 / 2 / auto / 5">
                     <div class="box-root box-divider--light-all-2 animationLeftRight tans3s"
                          style="flex-grow: 1"></div>
@@ -33,6 +41,7 @@
                     <div class="box-root box-background--blue animationLeftRight"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- More design elements -->
                 <div class="box-root flex-flex" style="grid-area: 8 / 4 / auto / 6">
                     <div class="box-root box-background--gray100 animationLeftRight tans3s"
                          style="flex-grow: 1"></div>
@@ -59,14 +68,16 @@
                 </div>
             </div>
         </div>
+        <!-- Container for the login form -->
         <div class="box-root padding-top--24 flex-flex flex-direction--column"
              style="flex-grow: 1; z-index: 9">
+            <!-- Header for the login page -->
             <div class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center">
                 <h1>
                     Login Page
                 </h1>
             </div>
-            <!-- If invalid credentials -->
+            <!-- Display error message if login fails -->
             @if (TempData["ErrorMessage"] != null)
             {
                 <div class="alert alert-danger">
@@ -74,39 +85,47 @@
                 </div>
             }
 
-            <!-- Login form -->
+            <!-- Login form section -->
             <div class="formbg-outer">
                 <div class="formbg">
-                    <!-- Login form -->
+                    <!-- Begin the login form -->
                     @using (Html.BeginForm("Login", "Auth"))
                     {
                         @Html.AntiForgeryToken()
+                // Protects against CSRF attacks
 
+                        <!-- Hidden CSRF token -->
                         <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
+
                         <div class="formbg-inner padding-horizontal--48">
+                            <!-- Subheading for the login form -->
                             <span class="padding-bottom--15">Sign in to your account</span>
                             <form id="stripe-login">
+                                <!-- Username input field -->
                                 <div class="field padding-bottom--24">
                                     @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
                                     @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
                                 </div>
+                                <!-- Password input field -->
                                 <div class="field padding-bottom--24">
-                                        @Html.LabelFor(m => m.Password, "Password", new { @for="password"})
-                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
-                                </div>                                
+                                    @Html.LabelFor(m => m.Password, "Password", new { @for = "password" })
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
+                                </div>
+                                <!-- Remember me checkbox -->
                                 <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
                                     <label for="checkbox">
-                                        <input type="checkbox" name="checkbox"/> Remember me
+                                        <input type="checkbox" name="checkbox" /> Remember me
                                     </label>
                                 </div>
+                                <!-- Submit button -->
                                 <div class="field padding-bottom--24">
                                     <button type="submit" name="submit">Log In</button>
                                 </div>
                             </form>
                         </div>
                     }
-                   
                 </div>
+                <!-- Footer links -->
                 <div class="footer-link padding-top--24">
                     <span>Don't have an account? <a href="@Url.Action("Register","Auth")"> Sign up</a></span>
                     <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">

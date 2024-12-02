@@ -1,20 +1,27 @@
 ﻿@model Flavor_Forge.Entities.Recipe
 
 <div class="container py-4">
+    <!-- Page Heading -->
     <h1 class="mb-4">Add Recipe</h1>
 
+    <!-- Recipe Form -->
     @using (Html.BeginForm("Add", "Recipe", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
     {
         <!-- Recipe Name Field -->
         <div class="form-group mb-3">
+            <!-- Label for Recipe Name -->
             @Html.Label("RecipeName", "Recipe Name", new { @class = "form-label" })
+            <!-- Textbox for entering the recipe name -->
             @Html.TextBox("RecipeName", null, new { @class = "form-control", placeholder = "Enter recipe name", required = "required" })
         </div>
 
         <!-- Recipe Image Upload -->
         <div class="form-group mb-3">
+            <!-- Label for Image Upload -->
             <label for="imageFile" class="form-label">Recipe Image</label>
+            <!-- File input for recipe image -->
             <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" required>
+            <!-- Helper text for image upload -->
             <small class="text-muted">Upload an image of your recipe (max 5MB)</small>
         </div>
 
@@ -22,18 +29,106 @@
         <div id="ingredients-container" class="mb-3">
             <h4>Ingredients</h4>
             <div class="ingredients-list">
+                <!-- Default ingredient row -->
                 <div class="form-group ingredient-row">
                     <div class="row align-items-center">
+                        <!-- Ingredient Name -->
                         <div class="col-md-5">
                             <input type="text" name="Ingredients[0].IngredientName"
                                    placeholder="Enter ingredient" class="form-control" required />
                         </div>
+                        <!-- Ingredient Quantity -->
                         <div class="col-md-2">
                             <input type="number" name="Ingredients[0].Quantity"
                                    placeholder="Quantity" class="form-control" step="0.1" required />
                         </div>
+                        <!-- Ingredient Unit -->
                         <div class="col-md-3">
                             <select name="Ingredients[0].Unit" class="form-control" required>
+                                <option value="">Select Unit</option>
+                                <option value="cup">Cup(s)</option>
+                                <option value="tbsp">Tablespoon(s)</option>
+                                <option value="tsp">Teaspoon(s)</option>
+                                <option value="oz">Ounce(s)</option>
+                                <option value="lb">Pound(s)</option>
+                                <option value="g">Gram(s)</option>
+                                <option value="ml">Milliliter(s)</option>
+                                <option value="piece">Piece(s)</option>
+                                <option value="pinch">Pinch</option>
+                                <option value="whole">Whole</option>
+                            </select>
+                        </div>
+                        <!-- Delete Ingredient Button -->
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm delete-ingredient">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Ingredient Button -->
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-secondary w-100" id="addIngredientBtn">
+                        <i class="fas fa-plus me-2"></i>Add Another Ingredient
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Instructions Field -->
+        <div class="form-group mb-3">
+            <!-- Label for Instructions -->
+            @Html.Label("Instructions", "Instructions", new { @class = "form-label" })
+            <!-- Textarea for entering instructions -->
+            @Html.TextArea("Instructions", null, new { @class = "form-control", placeholder = "Enter recipe instructions", rows = 4, required = "required" })
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Add Recipe
+            </button>
+        </div>
+    }
+</div>
+
+<script>
+    // Index to track ingredient rows
+    let ingredientIndex = 1;
+    // Maximum allowed ingredients
+    const MAX_INGREDIENTS = 20;
+
+    // Add Ingredient Button Click Handler
+    document.getElementById('addIngredientBtn').addEventListener('click', addIngredient);
+
+    // Function to add a new ingredient row
+    function addIngredient() {
+        const container = document.querySelector('.ingredients-list');
+        const currentCount = document.querySelectorAll('.ingredient-row').length;
+
+        // Prevent adding more than the maximum allowed ingredients
+        if (currentCount >= MAX_INGREDIENTS) {
+            alert(`Maximum limit of ${MAX_INGREDIENTS} ingredients reached!`);
+            return;
+        }
+
+        // Create a new ingredient row
+        const newRow = document.createElement('div');
+        newRow.className = 'form-group ingredient-row mt-2';
+        newRow.innerHTML = `
+                    <div class="row align-items-center">
+                        <div class="col-md-5">
+                            <input type="text" name="Ingredients[${ingredientIndex}].IngredientName"
+                                   placeholder="Enter ingredient" class="form-control" required />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="Ingredients[${ingredientIndex}].Quantity"
+                                   placeholder="Quantity" class="form-control" step="0.1" required />
+                        </div>
+                        <div class="col-md-3">
+                            <select name="Ingredients[${ingredientIndex}].Unit" class="form-control" required>
                                 <option value="">Select Unit</option>
                                 <option value="cup">Cup(s)</option>
                                 <option value="tbsp">Tablespoon(s)</option>
@@ -52,81 +147,7 @@
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-md-12">
-                    <button type="button" class="btn btn-secondary w-100" id="addIngredientBtn">
-                        <i class="fas fa-plus me-2"></i>Add Another Ingredient
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recipe Instructions Field -->
-        <div class="form-group mb-3">
-            @Html.Label("Instructions", "Instructions", new { @class = "form-label" })
-            @Html.TextArea("Instructions", null, new { @class = "form-control", placeholder = "Enter recipe instructions", rows = 4, required = "required" })
-        </div>
-
-        <!-- Submit Button -->
-        <div class="form-group mt-4">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save me-2"></i>Add Recipe
-            </button>
-        </div>
-    }
-</div>
-
-<script>
-    let ingredientIndex = 1;
-    const MAX_INGREDIENTS = 20;
-
-    document.getElementById('addIngredientBtn').addEventListener('click', addIngredient);
-
-    function addIngredient() {
-        const container = document.querySelector('.ingredients-list');
-        const currentCount = document.querySelectorAll('.ingredient-row').length;
-
-        if (currentCount >= MAX_INGREDIENTS) {
-            alert(`Maximum limit of ${MAX_INGREDIENTS} ingredients reached!`);
-            return;
-        }
-
-        const newRow = document.createElement('div');
-        newRow.className = 'form-group ingredient-row mt-2';
-        newRow.innerHTML = `
-                <div class="row align-items-center">
-                    <div class="col-md-5">
-                        <input type="text" name="Ingredients[${ingredientIndex}].IngredientName"
-                               placeholder="Enter ingredient" class="form-control" required />
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity"
-                               placeholder="Quantity" class="form-control" step="0.1" required />
-                    </div>
-                    <div class="col-md-3">
-                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control" required>
-                            <option value="">Select Unit</option>
-                            <option value="cup">Cup(s)</option>
-                            <option value="tbsp">Tablespoon(s)</option>
-                            <option value="tsp">Teaspoon(s)</option>
-                            <option value="oz">Ounce(s)</option>
-                            <option value="lb">Pound(s)</option>
-                            <option value="g">Gram(s)</option>
-                            <option value="ml">Milliliter(s)</option>
-                            <option value="piece">Piece(s)</option>
-                            <option value="pinch">Pinch</option>
-                            <option value="whole">Whole</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger btn-sm delete-ingredient">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </div>
-                </div>`;
+                    </div>`;
 
         container.appendChild(newRow);
         ingredientIndex++;
@@ -134,12 +155,14 @@
         attachDeleteListener(newRow.querySelector('.delete-ingredient'));
     }
 
+    // Function to attach a delete listener to a button
     function attachDeleteListener(button) {
         button.addEventListener('click', function () {
             deleteIngredient(this);
         });
     }
 
+    // Function to delete an ingredient row
     function deleteIngredient(button) {
         const ingredientRow = button.closest('.ingredient-row');
         const totalIngredients = document.querySelectorAll('.ingredient-row').length;
@@ -153,6 +176,7 @@
         }
     }
 
+    // Function to reindex ingredient rows after deletion
     function reindexIngredients() {
         const ingredients = document.querySelectorAll('.ingredient-row');
         ingredients.forEach((row, index) => {
@@ -167,6 +191,7 @@
         ingredientIndex = ingredients.length;
     }
 
+    // Function to update the state of the Add Ingredient button
     function updateAddButtonState() {
         const addButton = document.getElementById('addIngredientBtn');
         const currentCount = document.querySelectorAll('.ingredient-row').length;
@@ -180,9 +205,9 @@
         }
     }
 
-    // Initialize on page load
+    // Initialize the script on page load
     document.addEventListener('DOMContentLoaded', function () {
-        // Attach delete listener to initial delete button
+        // Attach delete listener to the default delete button
         const initialDeleteButton = document.querySelector('.delete-ingredient');
         if (initialDeleteButton) {
             attachDeleteListener(initialDeleteButton);

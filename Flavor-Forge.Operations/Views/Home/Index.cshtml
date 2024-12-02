@@ -1,34 +1,45 @@
 ﻿@{
+    // Sets the title of the page
     ViewData["Title"] = "Recipe Finder";
 }
 
 <div class="container">
     <!-- Hero Section -->
     <div class="hero-section text-center py-5">
+        <!-- Main heading for the page -->
         <h1 class="display-4 mb-4">Find Delicious Recipes</h1>
+        <!-- Brief description of the app -->
         <p class="lead mb-5">Enter ingredients you have, and we'll show you what you can cook!</p>
 
         <!-- Find Recipe Button -->
         <div class="row justify-content-center mb-5">
             <div class="col-md-8">
+                <!-- Button linking to the recipe search page -->
                 @Html.ActionLink("Find Recipes", "Search", "Recipe", null,
                          new { @class = "btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm find-recipes-btn" })
             </div>
         </div>
 
-        <!-- Popular Categories -->
+        <!-- Popular Categories Section -->
         <div class="categories-section mb-5">
+            <!-- Subheading for categories -->
             <h2 class="h4 mb-4">What you can find</h2>
+            <!-- Categories displayed as a grid -->
             <div class="row justify-content-center g-4">
+                <!-- Category 1: Quick & Easy -->
                 <div class="col-6 col-md-3">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
+                            <!-- Icon for the category -->
                             <i class="fas fa-clock mb-3 text-primary"></i>
+                            <!-- Title of the category -->
                             <h5 class="card-title">Quick & Easy</h5>
+                            <!-- Brief description of the category -->
                             <p class="card-text small">Ready in 30 minutes</p>
                         </div>
                     </div>
                 </div>
+                <!-- Category 2: Vegetarian -->
                 <div class="col-6 col-md-3">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
@@ -38,6 +49,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Category 3: Trending -->
                 <div class="col-6 col-md-3">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
@@ -47,6 +59,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Category 4: Healthy -->
                 <div class="col-6 col-md-3">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
@@ -60,6 +73,7 @@
         </div>
     </div>
 </div>
+
 
 <style>
     .hero-section {
