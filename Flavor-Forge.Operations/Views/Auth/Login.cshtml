@@ -1,22 +1,29 @@
 ﻿@model Flavor_Forge.Entities.User
 @{
-    // Sets the title of the page
     ViewBag.Title = "Login";
 }
 
-// Link to an external Google Font for custom styling
+<!-- Link to the IBM Plex Serif font hosted on Google Fonts -->
 <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Serif' rel='stylesheet'>
 
+<!-- Root container for the login page layout -->
 <div class="login-root">
-    <!-- Main container for the login page -->
+
+    <!-- A flexible container with a column layout, filling the entire viewport height -->
     <div class="box-root flex-flex flex-direction--column"
          style="min-height: 100vh; flex-grow: 1">
-        <!-- Background design for the login page -->
+
+        <!-- Background container with a white background and padding at the top -->
         <div class="loginbackground box-background--white padding-top--64">
+
+            <!-- Grid container for organizing background elements -->
             <div class="loginbackground-gridContainer">
-                <!-- Decorative grid containers for background design -->
+
+                <!-- Grid element spanning specific areas defined in the grid -->
                 <div class="box-root flex-flex"
                      style="grid-area: top / start / 8 / end">
+
+                    <!-- Inner box with a linear gradient background -->
                     <div class="box-root"
                          style="
                   background-image: linear-gradient(
@@ -26,58 +33,71 @@
                   flex-grow: 1;
                 "></div>
                 </div>
-                <!-- Additional decorative elements with animations -->
+                <!-- Container for a grid element, spanning specific areas of the grid -->
                 <div class="box-root flex-flex" style="grid-area: 4 / 2 / auto / 5">
+                    <!-- Inner box with a light border and animation applied -->
                     <div class="box-root box-divider--light-all-2 animationLeftRight tans3s"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Container for a grid element, placed at a specific grid position -->
                 <div class="box-root flex-flex"
                      style="grid-area: 6 / start / auto / 2">
+                    <!-- Inner box with a blue background -->
                     <div class="box-root box-background--blue800"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Container for a grid element, spanning specific areas of the grid -->
                 <div class="box-root flex-flex"
                      style="grid-area: 7 / start / auto / 4">
+                    <!-- Inner box with a blue background and animation -->
                     <div class="box-root box-background--blue animationLeftRight"
                          style="flex-grow: 1"></div>
                 </div>
-                <!-- More design elements -->
+
+                <!-- Container for a grid element, positioned in the 8th row and spanning specific columns -->
                 <div class="box-root flex-flex" style="grid-area: 8 / 4 / auto / 6">
+                    <!-- Inner box with a gray background and animation applied -->
                     <div class="box-root box-background--gray100 animationLeftRight tans3s"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Container for a grid element, positioned on the second row and spanning columns -->
                 <div class="box-root flex-flex"
                      style="grid-area: 2 / 15 / auto / end">
+                    <!-- Inner box with a cyan background and animation -->
                     <div class="box-root box-background--cyan200 animationRightLeft tans4s"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Container for a grid element, placed in the third row and spanning specific columns -->
                 <div class="box-root flex-flex"
                      style="grid-area: 3 / 14 / auto / end">
+                    <!-- Inner box with a blue background and animation -->
                     <div class="box-root box-background--blue animationRightLeft"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Container for a grid element, positioned in the 4th row and spanning columns 17 to 20 -->
                 <div class="box-root flex-flex"
                      style="grid-area: 4 / 17 / auto / 20">
+                    <!-- Inner box with a gray background and animation -->
                     <div class="box-root box-background--gray100 animationRightLeft tans4s"
                          style="flex-grow: 1"></div>
                 </div>
+                <!-- Container for a grid element, placed in the 5th row and spanning columns 14 to 17 -->
                 <div class="box-root flex-flex"
                      style="grid-area: 5 / 14 / auto / 17">
+                    <!-- Inner box with a light border and animation applied -->
                     <div class="box-root box-divider--light-all-2 animationRightLeft tans3s"
                          style="flex-grow: 1"></div>
                 </div>
             </div>
         </div>
-        <!-- Container for the login form -->
         <div class="box-root padding-top--24 flex-flex flex-direction--column"
              style="flex-grow: 1; z-index: 9">
-            <!-- Header for the login page -->
             <div class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center">
                 <h1>
                     Login Page
                 </h1>
             </div>
-            <!-- Display error message if login fails -->
+            <!-- If invalid credentials -->
             @if (TempData["ErrorMessage"] != null)
             {
                 <div class="alert alert-danger">
@@ -85,38 +105,46 @@
                 </div>
             }
 
-            <!-- Login form section -->
+            <!-- Login form -->
             <div class="formbg-outer">
                 <div class="formbg">
-                    <!-- Begin the login form -->
-                    @using (Html.BeginForm("Login", "Auth"))
+                    <!-- Login form -->
+                    @using (Html.BeginForm("Login", "Auth")) // Begin a form that posts to the "Login" action of the "Auth" controller
                     {
                         @Html.AntiForgeryToken()
-                // Protects against CSRF attacks
 
-                        <!-- Hidden CSRF token -->
+                        <!-- Hidden input for an additional CSRF token (if applicable) -->
                         <input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4" />
 
                         <div class="formbg-inner padding-horizontal--48">
-                            <!-- Subheading for the login form -->
+                            <!-- Header text for the login form -->
                             <span class="padding-bottom--15">Sign in to your account</span>
+
+                            <!-- Login form content -->
                             <form id="stripe-login">
-                                <!-- Username input field -->
+                                <!-- Username / Email field -->
                                 <div class="field padding-bottom--24">
+                                    <!-- Label for the username input field -->
                                     @Html.LabelFor(m => m.Username, "Username / Email", new { @for = "username" })
+                                    <!-- Input field for username (or email), styled with a class and marked as required -->
                                     @Html.TextBoxFor(m => m.Username, new { @class = "form-control text-lowercase", @id = "username", required = "required" })
                                 </div>
-                                <!-- Password input field -->
+
+                                <!-- Password field -->
                                 <div class="field padding-bottom--24">
-                                    @Html.LabelFor(m => m.Password, "Password", new { @for = "password" })
-                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
+                                    <!-- Label for the password input field -->
+                                        @Html.LabelFor(m => m.Password, "Password", new { @for="password"})
+                                    <!-- Input field for password, styled with a class and marked as required -->
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "password", required = "required" })
                                 </div>
+
                                 <!-- Remember me checkbox -->
                                 <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
                                     <label for="checkbox">
-                                        <input type="checkbox" name="checkbox" /> Remember me
+                                        <input type="checkbox" name="checkbox"/> Remember me
                                     </label>
                                 </div>
+
                                 <!-- Submit button -->
                                 <div class="field padding-bottom--24">
                                     <button type="submit" name="submit">Log In</button>
@@ -124,10 +152,15 @@
                             </form>
                         </div>
                     }
+                   
                 </div>
-                <!-- Footer links -->
+
+                <!-- Footer section -->
                 <div class="footer-link padding-top--24">
+                    <!-- Link to the registration page for new users -->
                     <span>Don't have an account? <a href="@Url.Action("Register","Auth")"> Sign up</a></span>
+                    
+                    <!-- Additional footer links -->
                     <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">
                         <span><a href="#">Contact</a></span>
                         <span><a href="#">Privacy & terms</a></span>
