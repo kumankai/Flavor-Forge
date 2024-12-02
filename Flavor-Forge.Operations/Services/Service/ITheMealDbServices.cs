@@ -1,4 +1,8 @@
-﻿using Flavor_Forge.Entities;
+﻿/*
+ * This service is for handling API calls to TheMealDb
+ */
+
+using Flavor_Forge.Entities;
 
 namespace Flavor_Forge.Operations.Services.Service
 {

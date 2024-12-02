@@ -14,7 +14,7 @@ namespace Flavor_Forge.Services.Service
         Recipe GetRecipeById(int recipeId);
         Recipe GetRecipeByName(string recipeName, int userId);
         Recipe CreateRecipe(Recipe recipe);
-        Recipe UpdateRecipe(Recipe recipe);
+        Task<Recipe> UpdateRecipeAsync(Recipe recipe);
         string DeleteRecipe(int recipeId);
         bool CheckSavedRecipe(string recipeName, int userId);
         List<string> ParseIngredients(Recipe recipe);

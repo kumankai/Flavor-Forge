@@ -35,12 +35,16 @@ namespace Flavor_Forge.Services.Repository
             var user = await _flavor_forgeDBContext.Users
                 .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
+            if (user == null)
+            {
+                return null;
+            }
+
             if (await CheckPassword(password, user.UserId))
             {
                 return user;
             }
 
-            // Returns user or null
             return null;
         }
 

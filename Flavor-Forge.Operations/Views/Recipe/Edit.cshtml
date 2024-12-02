@@ -1,0 +1,136 @@
+﻿@model Flavor_Forge.Entities.Recipe
+
+<div class="container py-4">
+    <h1 class="mb-4">Edit Recipe</h1>
+
+    @using (Html.BeginForm("Edit", "Recipe", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(m => m.RecipeId)
+
+        <!-- Recipe Name Field -->
+        <div class="form-group mb-3">
+            @Html.Label("RecipeName", "Recipe Name", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.RecipeName, new { @class = "form-control", required = "required" })
+        </div>
+
+        <!-- Recipe Image Upload -->
+        <div class="form-group mb-3">
+            <label for="imageFile" class="form-label">Update Recipe Image</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
+            <small class="text-muted">Leave blank to keep the existing image</small>
+        </div>
+
+        <!-- Existing Image -->
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="form-group mb-3">
+                <label class="form-label">Current Recipe Image</label>
+                <img src="@Model.ImageUrl" alt="Current Recipe Image" class="img-thumbnail" style="max-width: 200px;">
+            </div>
+        }
+
+        <!-- Ingredients Section -->
+        <div id="ingredients-container" class="mb-3">
+            <h4>Ingredients</h4>
+            <div class="ingredients-list">
+                @* Prepare all existing ingredients as JSON data for JavaScript *@
+                <script>
+                    const existingIngredients = @Html.Raw(Json.Serialize(ViewBag.Ingredients ?? new List<dynamic>()));
+                </script>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-secondary w-100" id="addIngredientBtn">
+                        <i class="fas fa-plus me-2"></i>Add Another Ingredient
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Instructions Field -->
+        <div class="form-group mb-3">
+            @Html.Label("Instructions", "Instructions", new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.Instructions, new { @class = "form-control", rows = 4, required = "required" })
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Update Recipe
+            </button>
+        </div>
+    }
+</div>
+
+<script>
+    const MAX_INGREDIENTS = 20;
+    let ingredientIndex = 0;
+
+    // Initialize existing ingredients
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.querySelector('.ingredients-list');
+
+        if (existingIngredients && existingIngredients.length) {
+            existingIngredients.forEach(ingredient => {
+                addIngredientRow(container, ingredient);
+            });
+        }
+    });
+
+    document.getElementById('addIngredientBtn').addEventListener('click', () => {
+        const container = document.querySelector('.ingredients-list');
+        addIngredientRow(container);
+    });
+
+    function addIngredientRow(container, ingredient = {}) {
+        if (container.querySelectorAll('.ingredient-row').length >= MAX_INGREDIENTS) {
+            alert(`Maximum limit of ${MAX_INGREDIENTS} ingredients reached!`);
+            return;
+        }
+
+        const row = document.createElement('div');
+        row.className = 'form-group ingredient-row mt-2';
+
+        row.innerHTML = `
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <input type="text" name="Ingredients[${ingredientIndex}].IngredientName"
+                               value="${ingredient.IngredientName || ''}"
+                               placeholder="Enter ingredient" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="Ingredients[${ingredientIndex}].Quantity"
+                               value="${ingredient.Quantity || ''}"
+                               placeholder="Quantity" class="form-control" step="0.1" required />
+                    </div>
+                    <div class="col-md-3">
+                        <select name="Ingredients[${ingredientIndex}].Unit" class="form-control" required>
+                            <option value="" ${!ingredient.Unit ? 'selected' : ''}>Select Unit</option>
+                            <option value="cup" ${ingredient.Unit === 'cup' ? 'selected' : ''}>Cup(s)</option>
+                            <option value="tbsp" ${ingredient.Unit === 'tbsp' ? 'selected' : ''}>Tablespoon(s)</option>
+                            <option value="tsp" ${ingredient.Unit === 'tsp' ? 'selected' : ''}>Teaspoon(s)</option>
+                            <option value="oz" ${ingredient.Unit === 'oz' ? 'selected' : ''}>Ounce(s)</option>
+                            <option value="lb" ${ingredient.Unit === 'lb' ? 'selected' : ''}>Pound(s)</option>
+                            <option value="g" ${ingredient.Unit === 'g' ? 'selected' : ''}>Gram(s)</option>
+                            <option value="ml" ${ingredient.Unit === 'ml' ? 'selected' : ''}>Milliliter(s)</option>
+                            <option value="piece" ${ingredient.Unit === 'piece' ? 'selected' : ''}>Piece(s)</option>
+                            <option value="pinch" ${ingredient.Unit === 'pinch' ? 'selected' : ''}>Pinch</option>
+                            <option value="whole" ${ingredient.Unit === 'whole' ? 'selected' : ''}>Whole</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm delete-ingredient">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        container.appendChild(row);
+        ingredientIndex++;
+
+        row.querySelector('.delete-ingredient').addEventListener('click', () => {
+            row.remove();
+        });
+    }
+</script>
