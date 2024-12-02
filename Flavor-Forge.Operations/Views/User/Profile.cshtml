@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Profile";
     var username = ViewBag.Username;
+    var image = ViewBag.Image;
+    var age = ViewBag.Age;
+    var bio = ViewBag.Bio;
 }
 
 <div class="container py-5">
@@ -9,6 +12,47 @@
     <div class="row mb-5">
         <div class="col-12 text-center">
             <h2 class="mb-0">@username's Profile</h2>
+        </div>
+    </div>
+
+    <!-- Profile Information Card -->
+    <div class="container bootstrap snippets bootdey mb-5">
+        <div class="panel-body inf-content">
+            <div class="d-flex align-items-center mb-3">
+                <div class="me-4">
+                    @if (string.IsNullOrEmpty(image))
+                    {
+                        <img src="~/recipe-images/defpfp.jpg" class="profile-image" />
+                    }
+                    else
+                    {
+                        <img src="@image" class="profile-image" alt="@username">
+                    }
+                </div>
+                <div>
+                    <strong>Information</strong><br />
+                    <div class="table-responsive">
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Name</strong></td>
+                                    <td class="text-primary">@username</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Age</strong></td>
+                                    <td class="text-primary">@age</td>
+                                </tr>
+                                <tr style="height:250px">
+                                    <td><strong>Bio</strong></td>
+                                    <td class="text-primary">
+                                        <textarea class="form-control bio-textarea" readonly>@bio</textarea>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -63,6 +107,59 @@
 </div>
 
 <style>
+    .inf-content {
+        border: 1px solid #DDDDDD;
+        border-radius: 10px;
+        box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .table-user-information {
+        display: table;
+        width: 600px;
+        margin: 0;
+    }
+
+        .table-user-information td:first-child {
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .table-user-information td:last-child {
+            width: 100%; /* Make the right column take the remaining space */
+        }
+
+        .table-user-information tr:last-child td {
+            height: 250px; /* Fixed height to match the tr style attribute */
+        }
+
+    .table-responsive {
+        max-width: none; /* Remove the max-width limit */
+    }
+
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .bio-textarea {
+        width: 100%;
+        height: 100% !important; /* Force full height */
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        resize: none;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        background-color: #f8f9fa;
+        box-sizing: border-box; /* Ensure padding is included in height calculation */
+    }
+
     .recipe-card {
         transition: transform 0.2s;
         border: none;
