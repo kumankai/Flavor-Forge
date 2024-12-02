@@ -1,18 +1,22 @@
 ﻿@model Flavor_Forge.Entities.Recipe
 
 @{
+    // Sets the page title
     ViewData["Title"] = "Recipe Details";
 }
 <div class="container py-5">
-    <!-- Recipe Header -->
+    <!-- Recipe Header Section -->
     <div class="row justify-content-center mb-5">
         <div class="col-lg-8">
             <div class="text-center">
+                <!-- Display the recipe image if available -->
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
                     <img src="@Model.ImageUrl" alt="@Model.RecipeName" class="recipe-image mb-4">
                 }
+                <!-- Display the recipe name -->
                 <h1 class="display-4 mb-3">@Model.RecipeName</h1>
+                <!-- Display metadata like number of ingredients and author -->
                 <div class="recipe-meta mb-3">
                     <span class="badge bg-primary rounded-pill me-2">
                         <i class="fas fa-list-ul me-1"></i>
@@ -26,12 +30,15 @@
                         </span>
                     }
                 </div>
+                <!-- Form to save the recipe -->
                 <form asp-action="Details" asp-controller="Recipe" method="post">
+                    <!-- Hidden fields to send recipe data -->
                     @Html.HiddenFor(m => m.RecipeName)
                     @Html.HiddenFor(m => m.ImageUrl)
                     @Html.HiddenFor(m => m.Author)
                     @Html.HiddenFor(m => m.Instructions)
 
+                    <!-- Hidden fields for ingredients if available -->
                     @if (ViewBag.Ingredients != null)
                     {
                         for (int i = 0; i < ViewBag.Ingredients.Count; i++)
@@ -42,6 +49,7 @@
                         }
                     }
 
+                    <!-- Save recipe button -->
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-bookmark me-2"></i>
                         Save Recipe
@@ -51,7 +59,7 @@
         </div>
     </div>
 
-    <!-- Recipe Content -->
+    <!-- Recipe Content Section -->
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card shadow-lg border-0 rounded-3">
@@ -65,19 +73,23 @@
                         <ul class="ingredients-list">
                             @if (ViewBag.Ingredients != null)
                             {
+                                <!-- Loop through each ingredient and display its details -->
                                 @foreach (var ingredient in ViewBag.Ingredients)
                                 {
                                     <li>
                                         <div class="ingredient-measure">
+                                            <!-- Display quantity if available -->
                                             @if (ingredient.Quantity != 0)
                                             {
                                                 <span class="quantity">@ingredient.Quantity</span>
                                             }
+                                            <!-- Display unit if available -->
                                             @if (!string.IsNullOrEmpty(ingredient.Unit))
                                             {
                                                 <span class="unit">@ingredient.Unit</span>
                                             }
                                         </div>
+                                        <!-- Display ingredient name -->
                                         <span class="ingredient-name">@ingredient.IngredientName</span>
                                     </li>
                                 }
@@ -91,6 +103,7 @@
                             <i class="fas fa-utensils text-primary me-2"></i>
                             Instructions
                         </h2>
+                        <!-- Display recipe instructions -->
                         <div class="instructions-content">
                             <p class="recipe-instructions">@Model.Instructions</p>
                         </div>
@@ -98,18 +111,20 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons Section -->
             <div class="text-center mt-4">
-                <!-- Existing buttons -->
+                <!-- Button to go back to the search page -->
                 <a class="btn btn-primary btn-lg me-2" asp-controller="Recipe" asp-action="Search">
                     <i class="fas fa-arrow-left me-2"></i>
                     Back to Search
                 </a>
+                <!-- Button to print the recipe -->
                 <a class="btn btn-outline-primary btn-lg" href="#" onclick="window.print()">
                     <i class="fas fa-print me-2"></i>
                     Print Recipe
                 </a>
-                @if (Model.Author == ViewBag.CurrentUsername) // Check if the logged-in user is the author
+                <!-- Button to edit the recipe, visible only if the logged-in user is the author -->
+                @if (Model.Author == ViewBag.CurrentUsername)
                 {
                     <a class="btn btn-warning btn-lg" asp-controller="Recipe" asp-action="Edit" asp-route-recipeId="@Model.RecipeId">
                         <i class="fas fa-edit me-2"></i>
@@ -117,10 +132,10 @@
                     </a>
                 }
             </div>
-            </div>
         </div>
     </div>
 </div>
+
 
 <style>
     /* General Styles */
