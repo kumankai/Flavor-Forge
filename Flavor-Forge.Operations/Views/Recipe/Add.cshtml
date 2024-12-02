@@ -1,7 +1,7 @@
 ﻿@model Flavor_Forge.Entities.Recipe
-
-<div class="container py-4">
-    <h1 class="mb-4">Add Recipe</h1>
+<body class="scroll-bg">
+	<div class="container py-4" id="border">
+    <h1 class="mb-4" >Add Recipe</h1>
 
     @using (Html.BeginForm("Add", "Recipe", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
     {
@@ -78,7 +78,24 @@
         </div>
     }
 </div>
-
+</body>
+<style>
+    #border{
+        width: 100%;
+        background: white;
+        border-radius:5px;
+        box-shadow: rgba(60, 66, 87, 0.12) 0px 7px 14px 0px, rgba(0, 0, 0, 0.12) 0px 3px 6px 0px;
+    }
+    .scroll-bg {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        padding-bottom: 330px;
+        background-color: #291b13;
+        background-image: url("https://andreivictor.ro/codepen/scroll-bg-animation-pinterest/bg_pasta_grid-3f880df3.jpg");
+        background-size: cover;
+    }
+</style>
 <script>
     let ingredientIndex = 1;
     const MAX_INGREDIENTS = 20;

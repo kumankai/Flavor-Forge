@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Rasa');
+
+*{
+    font-family: 'Rasa';
+}
 html {
   font-size: 14px;
 }
