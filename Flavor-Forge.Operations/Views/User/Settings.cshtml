@@ -30,4 +30,19 @@
         </div>
         <button type="submit" class="btn btn-primary">Change Password</button>
     </form>
+
+    <!-- Delete Account Button -->
+    <form asp-controller="User" asp-action="DeleteUser" method="post" id="deleteAccountForm">
+        <input type="hidden" name="userId" value="@ViewBag.UserId" />
+        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Account</button>
+    </form>
+
 </div>
+
+<script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            document.getElementById('deleteAccountForm').submit();
+        }
+    }
+</script>
