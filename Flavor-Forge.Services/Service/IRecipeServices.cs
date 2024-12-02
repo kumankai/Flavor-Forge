@@ -9,7 +9,6 @@ namespace Flavor_Forge.Services.Service
 {
     public interface IRecipeServices
     {
-        // Get recipes by user
         List<Recipe> GetRecipesByUserId(int userId);
         Recipe GetRecipeById(int recipeId);
         Recipe GetRecipeByName(string recipeName, int userId);
