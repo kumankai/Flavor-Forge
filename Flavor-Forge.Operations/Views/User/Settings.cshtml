@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Settings";
     var username = ViewBag.Username;
+    var image = ViewBag.Image;
 }
 
 <div class="container py-5">
@@ -12,7 +13,68 @@
         </div>
     </div>
 
-    <!-- Settings Card -->
+    <!-- Profile Information Card -->
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-body">
+                    <h5 class="card-title text-primary text-center">Profile Information</h5>
+                    <p class="card-text text-muted text-center mb-4">Update your profile image, age, and bio.</p>
+
+                    <hr class="my-4" />
+
+                    <!-- Profile Image Section -->
+                    <div class="text-center mb-4">
+                        <form asp-controller="User" asp-action="UpdateProfileImage" method="post" enctype="multipart/form-data">
+                            <label for="profileImageUpload" style="cursor: pointer;">
+                                @if (string.IsNullOrEmpty(image))
+                                {
+                                    <img src="~/recipe-images/defpfp.jpg" class="img-thumbnail rounded-circle" alt="Default Profile Image" />
+                                }
+                                else
+                                {
+                                    <img src=@image class="img-thumbnail rounded-circle" alt="@username" />
+                                }
+                            </label>
+                            <input type="file" id="profileImageUpload" name="profileImage" accept="image/*" onchange="this.form.submit()" hidden />
+                        </form>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- Edit Age Section -->
+                    <div class="mb-4">
+                        <h6 class="text-secondary">Update Age</h6>
+                        <form asp-controller="User" asp-action="UpdateAge" method="post" class="p-3 bg-light rounded shadow-sm">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <div class="form-floating mb-3">
+                                <input type="number" id="newAge" name="newAge" class="form-control" min="1" placeholder="Enter your age" required />
+                                <label for="newAge">Age</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 fw-bold">Save Age</button>
+                        </form>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- Edit Bio Section -->
+                    <div class="mb-4">
+                        <h6 class="text-secondary">Update Bio</h6>
+                        <form asp-controller="User" asp-action="UpdateBio" method="post" class="p-3 bg-light rounded shadow-sm">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <div class="form-floating mb-3">
+                                <textarea id="newBio" name="newBio" class="form-control" placeholder="Enter new bio" style="height: 150px;"></textarea>
+                                <label for="newBio">New Bio</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 fw-bold">Save Bio</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Username and Password Settings Card -->
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card shadow-lg border-0">
@@ -73,3 +135,31 @@
         }
     }
 </script>
+
+<style>
+    .table-user-information td {
+        vertical-align: middle;
+    }
+
+    .table-user-information tr td:first-child {
+        font-weight: bold;
+        width: 30%;
+    }
+
+    .img-thumbnail {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .inf-content {
+        border: 1px solid #DDDDDD;
+        border-radius: 10px;
+        box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+</style>

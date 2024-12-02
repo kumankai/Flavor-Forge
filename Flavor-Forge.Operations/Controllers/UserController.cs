@@ -2,6 +2,7 @@
 using Flavor_Forge.Entities;
 using Flavor_Forge.Services.Service;
 using Flavor_Forge.Operations.Services.Service;
+using Flavor_Forge.Operations.Services.Repository;
 
 namespace Flavor_Forge.Controllers
 {
@@ -71,6 +72,7 @@ namespace Flavor_Forge.Controllers
 
             ViewBag.Username = user.Username;
             ViewBag.UserId = user.UserId;
+            ViewBag.Image = user.Image;
             return View(recipes);
         }
 
@@ -82,10 +84,16 @@ namespace Flavor_Forge.Controllers
             var user = _userServices.GetUser(userId);
             if (user == null) return NotFound("User not found.");
 
+            _cookieServices.DeleteCookie("UserId");
+            _cookieServices.DeleteCookie("Username");
+
             user.Username = newUsername;
             _userServices.UpdateUser(user);
 
-            return RedirectToAction("Settings");
+            _cookieServices.SetCookie("UserId", user.UserId.ToString());
+            _cookieServices.SetCookie("Username", user.Username.ToString());
+
+            return RedirectToAction("Profile");
         }
 
         [HttpPost]
@@ -102,7 +110,7 @@ namespace Flavor_Forge.Controllers
             user.Password = Convert.ToBase64String(bytes);
             _userServices.UpdateUser(user);
 
-            return RedirectToAction("Settings");
+            return RedirectToAction("Profile");
         }
 
         [HttpPost]
@@ -126,5 +134,84 @@ namespace Flavor_Forge.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfileImage(IFormFile profileImage)
+        {
+            string? userIdCookie = _cookieServices.GetCookie("UserId");
+
+            // Check if user is logged in
+            if (userIdCookie == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            int userId = int.Parse(userIdCookie);
+            var user = _userServices.GetUser(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (profileImage != null && profileImage.Length > 0)
+            {
+                // Initialize ImageRepository for image validation and saving
+                var imageRepo = new ImageRepository();
+                string errorMessage;
+
+                // Validate the image
+                if (!imageRepo.ValidateImage(profileImage, out errorMessage))
+                {
+                    // Handle validation failure
+                    ModelState.AddModelError("ProfileImage", errorMessage);
+                    return RedirectToAction("Settings"); // Redirect back to settings
+                }
+
+                // Save the image and get the relative URL
+                var filePath = Path.Combine("wwwroot/recipe-images");
+                var imageUrl = await imageRepo.SaveImageAsync(profileImage, filePath);
+
+                // Delete the old image if exists
+                if (!string.IsNullOrEmpty(user.Image))
+                {
+                    imageRepo.DeleteImage(user.Image, filePath);
+                }
+
+                // Update the user with the new image URL
+                user.Image = imageUrl;
+                _userServices.UpdateUser(user);
+            }
+
+            return RedirectToAction("Profile"); // Redirect to profile page after updating
+        }
+
+
+
+        [HttpPost]
+        public IActionResult UpdateAge(int userId, int newAge)
+        {
+            if (newAge <= 0) return BadRequest("Age must be greater than 0.");
+
+            var user = _userServices.GetUser(userId);
+            if (user == null) return NotFound("User not found.");
+
+            user.Age = newAge;
+            _userServices.UpdateUser(user);
+
+            return RedirectToAction("Profile");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateBio(int userId, string newBio)
+        {
+            var user = _userServices.GetUser(userId);
+            if (user == null) return NotFound("User not found.");
+
+            user.Bio = newBio;
+            _userServices.UpdateUser(user);
+
+            return RedirectToAction("Profile");
+        }
     }
 }
