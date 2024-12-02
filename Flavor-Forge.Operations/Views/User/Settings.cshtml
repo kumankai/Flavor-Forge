@@ -7,36 +7,63 @@
     <!-- Profile Header -->
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h2 class="mb-0">@username's Profile</h2>
+            <h2 class="mb-0 display-4">@username's Profile</h2>
+            <p class="text-muted">Personalize your account settings below.</p>
         </div>
     </div>
 
-    <!-- Username Change Form -->
-    <form asp-controller="User" asp-action="UpdateUsername" method="post">
-        <input type="hidden" name="userId" value="@ViewBag.UserId" />
-        <div class="mb-3">
-            <label for="newUsername" class="form-label">New Username</label>
-            <input type="text" id="newUsername" name="newUsername" class="form-control" />
+    <!-- Settings Card -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-primary text-center">Account Settings</h5>
+                    <p class="card-text text-muted text-center mb-4">Manage your username, password, and account details.</p>
+
+                    <hr class="my-4" />
+
+                    <!-- Username Change Form -->
+                    <div class="mb-4">
+                        <h6 class="text-secondary">Update Username</h6>
+                        <form asp-controller="User" asp-action="UpdateUsername" method="post" class="p-3 bg-light rounded shadow-sm">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <div class="form-floating mb-3">
+                                <input type="text" id="newUsername" name="newUsername" class="form-control" placeholder="Enter new username" />
+                                <label for="newUsername">New Username</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 fw-bold">Save Username</button>
+                        </form>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- Password Change Form -->
+                    <div class="mb-4">
+                        <h6 class="text-secondary">Update Password</h6>
+                        <form asp-controller="User" asp-action="UpdatePassword" method="post" class="p-3 bg-light rounded shadow-sm">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <div class="form-floating mb-3">
+                                <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Enter new password" />
+                                <label for="newPassword">New Password</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 fw-bold">Save Password</button>
+                        </form>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- Delete Account Section -->
+                    <div class="text-center">
+                        <form asp-controller="User" asp-action="DeleteUser" method="post" id="deleteAccountForm">
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                            <button type="button" class="btn btn-danger w-100 fw-bold" onclick="confirmDelete()">Delete Account</button>
+                        </form>
+                        <small class="text-muted">Deleting your account is irreversible.</small>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Change Username</button>
-    </form>
-
-    <!-- Password Change Form -->
-    <form asp-controller="User" asp-action="UpdatePassword" method="post">
-        <input type="hidden" name="userId" value="@ViewBag.UserId" />
-        <div class="mb-3">
-            <label for="newPassword" class="form-label">New Password</label>
-            <input type="password" id="newPassword" name="newPassword" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary">Change Password</button>
-    </form>
-
-    <!-- Delete Account Button -->
-    <form asp-controller="User" asp-action="DeleteUser" method="post" id="deleteAccountForm">
-        <input type="hidden" name="userId" value="@ViewBag.UserId" />
-        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Account</button>
-    </form>
-
+    </div>
 </div>
 
 <script>

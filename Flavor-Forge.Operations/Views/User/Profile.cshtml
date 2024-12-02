@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Profile";
     var username = ViewBag.Username;
+    var image = ViewBag.Image;
+    var age = ViewBag.Age;
+    var bio = ViewBag.Bio;
 }
 
 <div class="container py-5">
@@ -11,6 +14,45 @@
             <h2 class="mb-0">@username's Profile</h2>
         </div>
     </div>
+
+
+    <!-- Profile Information Card -->
+    <div class="container bootstrap snippets bootdey mb-5">
+        <div class="panel-body inf-content">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (string.IsNullOrEmpty(image)) {
+                        <img src="~/recipe-images/defpfp.jpg" />
+                    }
+                    else {
+                        <img src=@image class="card-img-top recipe-thumbnail" alt="@username">
+                    }
+                </div>
+                <div class="col-md-6">
+                    <strong>Information</strong><br />
+                    <div class="table-responsive">
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td><strong><span class="glyphicon glyphicon-user text-primary"></span> Name</strong></td>
+                                    <td class="text-primary">@username</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span class="glyphicon glyphicon-envelope text-primary"></span> Age</strong></td>
+                                    <td class="text-primary">@age</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span class="glyphicon glyphicon-calendar text-primary"></span> Bio</strong></td>
+                                    <td class="text-primary">@bio</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Saved Recipes Section -->
     <div class="row">
@@ -63,6 +105,31 @@
 </div>
 
 <style>
+    .inf-content {
+        border: 1px solid #DDDDDD;
+        border-radius: 10px;
+        box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+
+        .inf-content .col-md-4 img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 50%;
+        }
+
+        .inf-content .col-md-6 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+    .table-user-information {
+        margin: 0;
+    }
+
     .recipe-card {
         transition: transform 0.2s;
         border: none;

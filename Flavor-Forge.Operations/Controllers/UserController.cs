@@ -10,12 +10,13 @@ namespace Flavor_Forge.Controllers
         private readonly IUserServices _userServices;
         private readonly IRecipeServices _recipeServices;
         private readonly ICookiesServices _cookieServices;
-
-        public UserController(IUserServices userServices, IRecipeServices recipeServices, ICookiesServices cookiesServices)
+        private readonly IImageServices _imageServices;
+        public UserController(IUserServices userServices, IRecipeServices recipeServices, ICookiesServices cookiesServices, IImageServices imageServices)
         {
             _userServices = userServices;
             _recipeServices = recipeServices;
             _cookieServices = cookiesServices;
+            _imageServices = imageServices;
         }
 
         public IActionResult Profile()
@@ -40,6 +41,9 @@ namespace Flavor_Forge.Controllers
             var recipes = _recipeServices.GetRecipesByUserId(userId);
 
             ViewBag.Username = user.Username;
+            ViewBag.Image = user.Image;
+            ViewBag.Age = user.Age;
+            ViewBag.Bio = user.Bio;
             ViewBag.UserId = user.UserId;
             return View(recipes);
         }
