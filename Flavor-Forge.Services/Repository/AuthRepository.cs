@@ -20,6 +20,11 @@ namespace Flavor_Forge.Services.Repository
             _flavor_forgeDBContext = context;
         }
 
+        // <summary>
+        // Registers a new user if the username does not already exist.
+        // </summary>
+        // <param name = "user" > The user object containing registration details.</param>
+        // <returns>The registered user object if successful; otherwise, null.</returns>
         public async Task<User?> RegisterAsync(User user)
         {
 
@@ -39,6 +44,12 @@ namespace Flavor_Forge.Services.Repository
             return user;
         }
 
+        // <summary>
+        // Authenticates a user by verifying their username and password.
+        // </summary>
+        // <param name="username">The username provided for login.</param>
+        // <param name="password">The password provided for login.</param>
+        // <returns>The user object if authentication is successful; otherwise, null.</returns>
         public async Task<User?> LoginAsync(string username, string password)
         {
             var user = await _flavor_forgeDBContext.Users
@@ -59,6 +70,11 @@ namespace Flavor_Forge.Services.Repository
             return null;
         }
 
+        // <summary>
+        // Simulates logging out a user by their user ID.
+        // </summary>
+        // <param name="userId">The ID of the user to log out.</param>
+        // <returns>True if logout is simulated successfully; otherwise, false.</returns>
         public async Task<bool> LogoutAsync(int userId)
         {
             var user = await _flavor_forgeDBContext.Users.FindAsync(userId);
