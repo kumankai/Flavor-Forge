@@ -89,6 +89,11 @@ namespace Flavor_Forge.Services.Repository
             return true;
         }
 
+        // <summary>
+        // Checks if a user with the specified username exists.
+        // </summary>
+        // <param name="username">The username to check for existence.</param>
+        // <returns>True if the user exists; otherwise, false.</returns>
         public async Task<bool> UserExistsAsync(string username)
         {
             var user = await _flavor_forgeDBContext.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower());
@@ -100,6 +105,13 @@ namespace Flavor_Forge.Services.Repository
 
             return true;
         }
+
+        // <summary>
+        // Verifies if the given password matches the stored password for the specified user.
+        // </summary>
+        // <param name="password">The password to verify.</param>
+        // <param name="userId">The ID of the user whose password is being verified.</param>
+        // <returns>True if the password matches; otherwise, false.</returns>
         public async Task<bool> CheckPassword(string password, int userId) 
         {
             using var sha256 = System.Security.Cryptography.SHA256.Create();
