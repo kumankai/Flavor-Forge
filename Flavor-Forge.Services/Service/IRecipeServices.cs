@@ -1,4 +1,9 @@
-﻿using Flavor_Forge.Entities;
+﻿/*
+ * This service is for handling Recipe related actions like searching for them or updating
+ * Used for dependency injection
+ */
+
+using Flavor_Forge.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +21,5 @@ namespace Flavor_Forge.Services.Service
         Task<Recipe> UpdateRecipeAsync(Recipe recipe);
         string DeleteRecipe(int recipeId);
         bool CheckSavedRecipe(string recipeName, int userId);
-        List<string> ParseIngredients(Recipe recipe);
     }
 }

@@ -27,6 +27,7 @@
                     <div class="text-center mb-4">
                         <form asp-controller="User" asp-action="UpdateProfileImage" method="post" enctype="multipart/form-data">
                             <label for="profileImageUpload" style="cursor: pointer;">
+                                <!-- If the user has not set a profile picture yet use the default -->
                                 @if (string.IsNullOrEmpty(image))
                                 {
                                     <img src="~/recipe-images/defpfp.jpg" class="img-thumbnail rounded-circle" alt="Default Profile Image" />
