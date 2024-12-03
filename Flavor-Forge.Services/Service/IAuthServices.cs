@@ -1,4 +1,9 @@
-﻿using Flavor_Forge.Entities;
+﻿/*
+ * This service is for handling Registering, log in and log out related actions
+ * Used for dependency injection
+ */
+
+using Flavor_Forge.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

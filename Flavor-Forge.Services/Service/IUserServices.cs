@@ -1,4 +1,9 @@
-﻿using Flavor_Forge.Entities;
+﻿/*
+ * This service is for handling User related actions like creating or deleting them
+ * Used for Dependecy Injection
+ */
+
+using Flavor_Forge.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
