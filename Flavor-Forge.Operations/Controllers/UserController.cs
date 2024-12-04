@@ -22,17 +22,20 @@ namespace Flavor_Forge.Controllers
 
         public IActionResult Profile()
         {
+            // Use cookies
             string? userIdCookie = _cookieServices.GetCookie("UserId");
 
             // Check if user is logged in
             if (userIdCookie == null)
             {
+                // If no user is logged in send to login page
                 return RedirectToAction("Login", "Auth");
             }
 
             int userId = int.Parse(userIdCookie);
             var user = _userServices.GetUser(userId);
 
+            // If user does not exist than send to login page too
             if (user == null)
             {
                 return RedirectToAction("Login", "Auth");
@@ -41,27 +44,33 @@ namespace Flavor_Forge.Controllers
             // Get user's recipes
             var recipes = _recipeServices.GetRecipesByUserId(userId);
 
+            // Send all required information to View
             ViewBag.Username = user.Username;
             ViewBag.Image = user.Image;
             ViewBag.Age = user.Age;
             ViewBag.Bio = user.Bio;
             ViewBag.UserId = user.UserId;
+
+            // Return View
             return View(recipes);
         }
 
         public IActionResult Settings()
         {
+            // Use cookies
             string? userIdCookie = _cookieServices.GetCookie("UserId");
 
             // Check if user is logged in
             if (userIdCookie == null)
             {
+                // If no user is logged in send to login page
                 return RedirectToAction("Login", "Auth");
             }
 
             int userId = int.Parse(userIdCookie);
             var user = _userServices.GetUser(userId);
 
+            // If user does not exist than send to login page too
             if (user == null)
             {
                 return RedirectToAction("Login", "Auth");
@@ -70,46 +79,60 @@ namespace Flavor_Forge.Controllers
             // Get user's recipes
             var recipes = _recipeServices.GetRecipesByUserId(userId);
 
+            // Send all required information to View (notice it is not all the same as the profile View)
             ViewBag.Username = user.Username;
             ViewBag.UserId = user.UserId;
             ViewBag.Image = user.Image;
+
+            // Return View
             return View(recipes);
         }
 
         [HttpPost]
         public IActionResult UpdateUsername(int userId, string newUsername)
         {
+            // Checker for username (make sure not blank)
             if (string.IsNullOrWhiteSpace(newUsername)) return BadRequest("Username cannot be empty.");
 
+            // Checker for username (make sure user exists)
             var user = _userServices.GetUser(userId);
             if (user == null) return NotFound("User not found.");
 
+            // Delete cookies related to old username
             _cookieServices.DeleteCookie("UserId");
             _cookieServices.DeleteCookie("Username");
 
+            // Set new username in database
             user.Username = newUsername;
             _userServices.UpdateUser(user);
 
+            // Create new cookies for new username
             _cookieServices.SetCookie("UserId", user.UserId.ToString());
             _cookieServices.SetCookie("Username", user.Username.ToString());
 
+            // Return View for Redirection
             return RedirectToAction("Profile");
         }
 
         [HttpPost]
         public IActionResult UpdatePassword(int userId, string newPassword)
         {
+            // Checker for password (make sure not blank)
             if (string.IsNullOrWhiteSpace(newPassword)) return BadRequest("Password cannot be empty.");
 
+            // Checker for password (make sure user exists)
             var user = _userServices.GetUser(userId);
             if (user == null) return NotFound("User not found.");
 
+            // Hash new password
             using var sha256 = System.Security.Cryptography.SHA256.Create();
             var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(newPassword));
             
+            // Set new password in database
             user.Password = Convert.ToBase64String(bytes);
             _userServices.UpdateUser(user);
 
+            // Return View for Redirection
             return RedirectToAction("Profile");
         }
 
@@ -130,7 +153,7 @@ namespace Flavor_Forge.Controllers
             _cookieServices.DeleteCookie("UserId");
             _cookieServices.DeleteCookie("Username");
 
-            // Redirect to Home Page or Login
+            // Redirect to Home Page
             return RedirectToAction("Index", "Home");
         }
 
@@ -154,6 +177,7 @@ namespace Flavor_Forge.Controllers
                 return NotFound("User not found.");
             }
 
+            // Image checker
             if (profileImage != null && profileImage.Length > 0)
             {
                 // Initialize ImageRepository for image validation and saving
@@ -183,7 +207,8 @@ namespace Flavor_Forge.Controllers
                 _userServices.UpdateUser(user);
             }
 
-            return RedirectToAction("Profile"); // Redirect to profile page after updating
+            // Return View for Redirection
+            return RedirectToAction("Profile");
         }
 
 
@@ -191,26 +216,33 @@ namespace Flavor_Forge.Controllers
         [HttpPost]
         public IActionResult UpdateAge(int userId, int newAge)
         {
+            // Checker for Age
             if (newAge <= 0) return BadRequest("Age must be greater than 0.");
 
+            // Checker for username (make sure user exists)
             var user = _userServices.GetUser(userId);
             if (user == null) return NotFound("User not found.");
 
+            // Set new age in database
             user.Age = newAge;
             _userServices.UpdateUser(user);
 
+            // Return View for Redirection
             return RedirectToAction("Profile");
         }
 
         [HttpPost]
         public IActionResult UpdateBio(int userId, string newBio)
         {
+            // Checker for username (make sure user exists)
             var user = _userServices.GetUser(userId);
             if (user == null) return NotFound("User not found.");
 
+            // Set new bio in database
             user.Bio = newBio;
             _userServices.UpdateUser(user);
 
+            // Return View for Redirection
             return RedirectToAction("Profile");
         }
     }
