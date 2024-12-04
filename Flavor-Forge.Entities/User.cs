@@ -20,7 +20,7 @@ namespace Flavor_Forge.Entities
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$",
            ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.")]
         public string? Password { get; set; }
-        public string? Image {  get; set; }
+        public string? Image { get; set; }
         public int? Age { get; set; }
         public string? Bio { get; set; }
     }
